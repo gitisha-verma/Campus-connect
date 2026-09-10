@@ -4,24 +4,36 @@
     <title>Campus Connect - Signup</title>
     <link rel="stylesheet" href="stylecampus.css">
 </head>
+
 <body>
+
     <h1>Campus Connect</h1>
     <h2>Signup</h2>
-    <form>
-    <label>Name</label><br>
-    <input type="text" placeholder="Enter your name"><br><br>
 
-    <label>Email</label><br>
-    <input type="email" placeholder="Enter your email"><br><br>
+    <form id="signupForm" novalidate>
 
-    <label>Password</label><br>
-    <input type="password" placeholder="Create a password"><br><br>
+        <p id="signupError" class="error-message"></p>
 
-    <label>Confirm Password</label><br>
-    <input type="password" placeholder="Confirm your password"><br><br>
-    <button type="submit">Signup</button>
-    <p>Already have an account?</p>
-<a href="login.html">Login here</a>
-</form>
+        <label>Name</label><br>
+        <input type="text" id="signupName" placeholder="Enter your name"><br><br>
+
+        <label>Email</label><br>
+        <input type="email" id="signupEmail" placeholder="Enter your email"><br><br>
+
+        <label>Password</label><br>
+        <input type="password" id="signupPassword" placeholder="Create a password"><br><br>
+
+        <label>Confirm Password</label><br>
+        <input type="password" id="confirmPassword" placeholder="Confirm your password"><br><br>
+
+        <button type="submit">Signup</button>
+
+        <p>Already have an account?</p>
+        <a href="login.html">Login here</a>
+
+    </form>
+
+    <script src="validation.js"></script>
+
 </body>
 </html>

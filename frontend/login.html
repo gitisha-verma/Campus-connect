@@ -7,15 +7,17 @@
 <body>
     <h1>Campus Connect</h1>
     <h2>Login</h2>
-    <form>
-    <label>Email</label><br>
-    <input type="email" placeholder="Enter your email"><br><br>
+    <form id="loginForm" novalidate>
+        <p id="loginError" class="error-message"></p>
+        <label>Email</label><br>
+        <input type="email" id="loginEmail" placeholder="Enter your email"><br><br>
 
     <label>Password</label><br>
-    <input type="password" placeholder="Enter your password"><br><br>
+    <input type="password"  id="loginPassword"placeholder="Enter your password"><br><br>
     <button type="submit">Login</button>
     <p>Don't have an account?</p>
 <a href="signup.html">Create an account</a>
 </form>
+<script src="validation.js"></script>
 </body>
 </html>
