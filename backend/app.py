@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../frontend", static_url_path="")
 def get_db_connection():
     conn = sqlite3.connect("database.db")
     conn.row_factory = sqlite3.Row
@@ -59,6 +59,6 @@ def login():
     })
 @app.route("/")
 def home():
-    return "Campus Connect Backend is Running!"
+    return app.send_static_file("index.html")
 if __name__ == "__main__":
     app.run(debug=True)

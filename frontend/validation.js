@@ -9,6 +9,7 @@ if (signupForm) {
 
     signupForm.addEventListener("submit", function (event) {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        event.preventDefault();
         signupError.textContent = "";
 
         if (signupName.value.trim() === "") {
@@ -29,6 +30,26 @@ if (signupForm) {
         } else if (signupPassword.value !== confirmPassword.value) {
             event.preventDefault();
             signupError.textContent = "Passwords do not match.";
+        }
+        else {
+            fetch("/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: signupName.value.trim(),
+                    email: signupEmail.value.trim(),
+                    password: signupPassword.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                signupError.textContent = data.message;
+            })
+            .catch(error => {
+                signupError.textContent = "Something went wrong.";
+            });
         }
     });
 
@@ -55,6 +76,7 @@ if (loginForm) {
 
     loginForm.addEventListener("submit", function (event) {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        event.preventDefault();
         loginError.textContent = "";
 
         if (loginEmail.value.trim() === "") {
@@ -66,6 +88,25 @@ if (loginForm) {
         } else if (loginPassword.value === "") {
             event.preventDefault();
             loginError.textContent = "Please enter your password.";
+        }
+        else {
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: loginEmail.value.trim(),
+                    password: loginPassword.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loginError.textContent = data.message;
+            })
+            .catch(error => {
+                loginError.textContent = "Something went wrong.";
+            });
         }
     });
 
