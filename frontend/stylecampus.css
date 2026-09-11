@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+input {
+    width: 250px;
+    padding: 8px;
+    margin-top: 5px;
+}
+button {
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+}
+a {
+    color: blue;
+}
+.error-message {
+    color: red;
+    min-height: 20px;
+}
