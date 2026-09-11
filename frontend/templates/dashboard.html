@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+            <h1>Campus Connect</h1>
+
+            <nav>
+                <a href="#">Dashboard</a>
+                <a href="#">Events</a>
+                <a href="#">Notices</a>
+                <a href="#">Resources</a>
+                <a href="#">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section class="welcome-section">
+                <h2>Welcome, Student!</h2>
+                <p>Here is what is happening on campus today.</p>
+            </section>
+            <section class="summary-cards">
+
+    <div class="card">
+        <h3>Upcoming Events</h3>
+        <p>3 Events</p>
+    </div>
+
+    <div class="card">
+        <h3>Latest Notices</h3>
+        <p>5 New Notices</p>
+    </div>
+
+    <div class="card">
+        <h3>Study Resources</h3>
+        <p>12 Resources</p>
+    </div>
+
+</section>
+<section class="dashboard-sections">
+
+    <div class="content-box">
+        <h2>Upcoming Events</h2>
+
+        <div class="item">
+            <h3>Career Guidance Workshop</h3>
+            <p>15 September, 10:00 AM</p>
+        </div>
+
+        <div class="item">
+            <h3>Annual Sports Meet</h3>
+            <p>18 September, 9:00 AM</p>
+        </div>
+    </div>
+
+    <div class="content-box">
+        <h2>Latest Notices</h2>
+
+        <div class="item">
+            <h3>Semester Fee Submission</h3>
+            <p>Last date: 20 September</p>
+        </div>
+
+        <div class="item">
+            <h3>Library Timing Updated</h3>
+            <p>The library is now open until 7:00 PM.</p>
+        </div>
+    </div>
+
+</section>
+        </main>
+
+    </div>
+</body>
+</html>
