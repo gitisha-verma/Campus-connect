@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
-
 <body>
     <div class="dashboard-container">
 
@@ -25,8 +24,7 @@
 
         <main class="main-content">
             <section class="welcome-section">
-                <h2>Welcome, Student!</h2>
-                <p>Here is what is happening on campus today.</p>
+                <h2>Welcome, <span id="student-name">Student</span>!</h2>                <p>Here is what is happening on campus today.</p>
             </section>
             <section class="summary-cards">
 
@@ -80,5 +78,6 @@
         </main>
 
     </div>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>

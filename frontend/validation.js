@@ -102,7 +102,11 @@ if (loginForm) {
             })
             .then(response => response.json())
             .then(data => {
-                loginError.textContent = data.message;
+                if (data.message === "Login successful") {
+                    window.location.href = "/dashboard";
+                } else {
+                    loginError.textContent = data.message;
+                }
             })
             .catch(error => {
                 loginError.textContent = "Something went wrong.";
