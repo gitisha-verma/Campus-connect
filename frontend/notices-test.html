@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notices Test</title>
+</head>
+<body>
+
+    <h1>Campus Connect - Notices</h1>
+
+    <input
+        type="text"
+        id="noticeSearch"
+        placeholder="Search notices..."
+    >
+
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="Academic">Academic</option>
+        <option value="Events">Events</option>
+        <option value="Examination">Examination</option>
+        <option value="General">General</option>
+    </select>
+
+    <div id="noticesContainer"></div>
+
+    <p id="noNoticesMessage" style="display: none;">
+        No notices found.
+    </p>
+
+    <script src="notices.js"></script>
+</body>
+</html>
