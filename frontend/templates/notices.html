@@ -30,92 +30,32 @@
             <section class="notices-header">
                 <h2>Campus Notices</h2>
                 <p>Stay updated with the latest information from your college.</p>
+
+                <input
+                    type="text"
+                    id="noticeSearch"
+                    placeholder="Search notices..."
+                >
+
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Examination">Examination</option>
+                    <option value="Holiday">Holiday</option>
+                    <option value="Scholarship">Scholarship</option>
+                </select>
             </section>
 
-            <section class="notices-list">
-
-                <div class="notice-card">
-
-    <div class="notice-category">
-        Academic
-    </div>
-
-    <h3>Mid-Semester Examination Schedule</h3>
-
-    <p class="notice-description">
-        The mid-semester examination schedule has been released.
-        Students are requested to check the examination dates and
-        prepare accordingly.
-    </p>
-
-    <p class="notice-date">
-        Date: 13 September 2026
-    </p>
-
-</div>
-<div class="notice-card">
-
-    <div class="notice-category">
-        Library
-    </div>
-
-    <h3>Library Timing Updated</h3>
-
-    <p class="notice-description">
-        The college library will now remain open until 7:00 PM
-        on all working days.
-    </p>
-
-    <p class="notice-date">
-        Date: 12 September 2026
-    </p>
-
-</div>
-
-<div class="notice-card">
-
-    <div class="notice-category">
-        Fees
-    </div>
-
-    <h3>Semester Fee Submission</h3>
-
-    <p class="notice-description">
-        Students are requested to complete their semester fee
-        submission before the last date to avoid late charges.
-    </p>
-
-    <p class="notice-date">
-        Date: 10 September 2026
-    </p>
-
-</div>
-
-<div class="notice-card">
-
-    <div class="notice-category">
-        Campus
-    </div>
-
-    <h3>Campus Cleanliness Drive</h3>
-
-    <p class="notice-description">
-        A campus cleanliness drive will be conducted this week.
-        Students are encouraged to participate and help maintain
-        a clean campus environment.
-    </p>
-
-    <p class="notice-date">
-        Date: 8 September 2026
-    </p>
-
-</div>
-
+            <section class="notices-list" id="noticesContainer">
+                <!-- Notices will be loaded from the database using JavaScript -->
             </section>
+
+            <p id="noNoticesMessage" style="display: none;">
+                No notices found.
+            </p>
 
         </main>
 
     </div>
 
-</body>
+    <script src="{{ url_for('notices_js') }}"></script>
 </html>

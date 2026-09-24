@@ -1,40 +1,4 @@
-const notices = [
-    {
-        id: 1,
-        title: "Mid-Semester Examination Schedule",
-        category: "Examination",
-        date: "2026-09-15",
-        description: "The mid-semester examination schedule has been released."
-    },
-    {
-        id: 2,
-        title: "Assignment Submission Deadline",
-        category: "Academic",
-        date: "2026-09-14",
-        description: "Students must submit their pending assignments before the deadline."
-    },
-    {
-        id: 3,
-        title: "Campus Cultural Fest",
-        category: "Events",
-        date: "2026-09-12",
-        description: "Registration is now open for the annual campus cultural fest."
-    },
-    {
-        id: 4,
-        title: "Library Timing Update",
-        category: "General",
-        date: "2026-09-10",
-        description: "The library will remain open until 8 PM on weekdays."
-    },
-    {
-        id: 5,
-        title: "Internal Assessment Notice",
-        category: "Academic",
-        date: "2026-09-08",
-        description: "Students are requested to check their internal assessment details."
-    }
-];
+let notices = [];
 
 const noticesContainer = document.getElementById("noticesContainer");
 const noNoticesMessage = document.getElementById("noNoticesMessage");
@@ -60,7 +24,7 @@ function displayNotices(noticesToDisplay) {
             <h2>${notice.title}</h2>
             <p><strong>Category:</strong> ${notice.category}</p>
             <p><strong>Date:</strong> ${notice.date}</p>
-            <p>${notice.description}</p>
+            <p>${notice.content}</p>
         `;
 
         noticesContainer.appendChild(noticeElement);
@@ -74,7 +38,7 @@ function filterNotices() {
     const filteredNotices = notices.filter(function(notice) {
         const matchesSearch =
             notice.title.toLowerCase().includes(searchText) ||
-            notice.description.toLowerCase().includes(searchText);
+            notice.content.toLowerCase().includes(searchText);
 
         const matchesCategory =
             selectedCategory === "all" ||
@@ -86,7 +50,27 @@ function filterNotices() {
     displayNotices(filteredNotices);
 }
 
+function loadNotices() {
+    fetch("/api/notices")
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("Failed to load notices");
+            }
+
+            return response.json();
+        })
+        .then(function(data) {
+            notices = data;
+            displayNotices(notices);
+        })
+        .catch(function(error) {
+            console.error("Error loading notices:", error);
+            noNoticesMessage.style.display = "block";
+            noNoticesMessage.textContent = "Unable to load notices.";
+        });
+}
+
 noticeSearch.addEventListener("input", filterNotices);
 categoryFilter.addEventListener("change", filterNotices);
 
-displayNotices(notices);
+loadNotices();

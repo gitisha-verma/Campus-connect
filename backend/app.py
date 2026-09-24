@@ -74,19 +74,49 @@ def login():
         "email": email
     })
 
+
 @app.route("/dashboard-data")
 def dashboard_data():
     return jsonify({
         "studentName": session.get("student_name", "Student")
     })
+
+
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
 
 
+# Feature 3 - Notices API
+@app.route("/api/notices")
+def get_notices():
+    conn = get_db_connection()
+
+    notices = conn.execute(
+        "SELECT id, title, content, date, category FROM notices ORDER BY date DESC"
+    ).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(notice) for notice in notices])
+
+
+# Feature 3 - Notices page
+@app.route("/notices")
+def notices_page():
+    return render_template("notices.html")
+
+
+# Feature 3 - Notices JavaScript
+@app.route("/notices.js")
+def notices_js():
+    return send_from_directory("../frontend", "notices.js")
+
+
 @app.route("/")
 def home():
     return send_from_directory("../frontend", "index.html")
+
 
 @app.route("/login.html")
 def login_page():
@@ -96,8 +126,12 @@ def login_page():
 @app.route("/signup.html")
 def signup_page():
     return send_from_directory("../frontend", "signup.html")
+
+
 @app.route("/validation.js")
 def validation_js():
     return send_from_directory("../frontend", "validation.js")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
