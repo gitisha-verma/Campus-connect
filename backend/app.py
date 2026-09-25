@@ -107,6 +107,26 @@ def notices_page():
     return render_template("notices.html")
 
 
+# Feature 4 - Events API
+@app.route("/api/events")
+def get_events():
+    conn = get_db_connection()
+
+    events = conn.execute(
+        "SELECT id, title, description, date, time, location FROM events ORDER BY date ASC"
+    ).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(event) for event in events])
+
+
+# Feature 4 - Events page
+@app.route("/events")
+def events_page():
+    return render_template("events.html")
+
+
 # Feature 3 - Notices JavaScript
 @app.route("/notices.js")
 def notices_js():
