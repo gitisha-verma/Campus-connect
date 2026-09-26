@@ -127,6 +127,26 @@ def events_page():
     return render_template("events.html")
 
 
+# Feature 5 - Resources API
+@app.route("/api/resources")
+def get_resources():
+    conn = get_db_connection()
+
+    resources = conn.execute(
+        "SELECT id, title, description, link FROM resources ORDER BY id ASC"
+    ).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(resource) for resource in resources])
+
+
+# Feature 5 - Resources page
+@app.route("/resources")
+def resources_page():
+    return render_template("resources.html")
+
+
 # Feature 3 - Notices JavaScript
 @app.route("/notices.js")
 def notices_js():

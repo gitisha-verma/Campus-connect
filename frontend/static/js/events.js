@@ -4,6 +4,7 @@ const dateFilter = document.getElementById("event-date");
 const eventsList = document.querySelector(".events-list");
 
 let eventCards = [];
+let noEventsMessage = null;
 
 async function loadEvents() {
     try {
@@ -99,6 +100,8 @@ function filterEvents() {
     const selectedCategory = categoryFilter.value;
     const selectedDate = dateFilter.value;
 
+    let visibleCount = 0;
+
     eventCards.forEach(function (card) {
         const title = card.querySelector("h3").textContent.toLowerCase();
         const description = card.querySelector(".event-description").textContent.toLowerCase();
@@ -117,9 +120,25 @@ function filterEvents() {
 
         const matchesDate = matchesDateFilter(card, selectedDate);
 
-        card.style.display =
-            matchesSearch && matchesCategory && matchesDate ? "" : "none";
+        if (matchesSearch && matchesCategory && matchesDate) {
+            card.style.display = "";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
     });
+
+    if (visibleCount === 0) {
+        if (!noEventsMessage) {
+            noEventsMessage = document.createElement("p");
+            noEventsMessage.id = "no-events-message";
+            noEventsMessage.textContent = "No events found.";
+            eventsList.appendChild(noEventsMessage);
+        }
+    } else if (noEventsMessage) {
+        noEventsMessage.remove();
+        noEventsMessage = null;
+    }
 }
 
 

@@ -37,7 +37,7 @@
                 </p>
             </section>
 
-            <!-- Search and Filter Controls -->
+            <!-- Search Controls -->
             <section class="resources-controls">
 
                 <div class="search-box">
@@ -49,135 +49,17 @@
                     >
                 </div>
 
-                <div class="filter-box">
-                    <label for="resource-category">Category</label>
-                    <select id="resource-category">
-                        <option value="all">All Categories</option>
-                        <option value="academic">Academic</option>
-                        <option value="library">Library</option>
-                        <option value="career">Career</option>
-                        <option value="college">College</option>
-                    </select>
-                </div>
-
             </section>
 
             <!-- Resources List -->
             <section class="resources-list" id="resources-list">
-
-                <!-- Resource 1 -->
-                <article class="resource-card">
-                    <span class="resource-category">Academic</span>
-
-                    <h3 class="resource-title">
-                        Data Structures Study Notes
-                    </h3>
-
-                    <p class="resource-description">
-                        Helpful study notes covering arrays, linked lists,
-                        stacks, queues, trees, and graphs.
-                    </p>
-
-                    <div class="resource-details">
-                        <p>
-                            <strong>Type:</strong> Study Notes
-                        </p>
-                        <p>
-                            <strong>Date:</strong> 10 September 2026
-                        </p>
-                    </div>
-
-                    <a href="#" class="view-resource">
-                        View Resource
-                    </a>
-                </article>
-
-                <!-- Resource 2 -->
-                <article class="resource-card">
-                    <span class="resource-category">Library</span>
-
-                    <h3 class="resource-title">
-                        Digital Library Portal
-                    </h3>
-
-                    <p class="resource-description">
-                        Access digital books, journals, research papers,
-                        and other online learning materials.
-                    </p>
-
-                    <div class="resource-details">
-                        <p>
-                            <strong>Type:</strong> Online Portal
-                        </p>
-                        <p>
-                            <strong>Date:</strong> 8 September 2026
-                        </p>
-                    </div>
-
-                    <a href="#" class="view-resource">
-                        View Resource
-                    </a>
-                </article>
-
-                <!-- Resource 3 -->
-                <article class="resource-card">
-                    <span class="resource-category">Career</span>
-
-                    <h3 class="resource-title">
-                        Placement Preparation Guide
-                    </h3>
-
-                    <p class="resource-description">
-                        A collection of useful materials for aptitude tests,
-                        technical interviews, and placement preparation.
-                    </p>
-
-                    <div class="resource-details">
-                        <p>
-                            <strong>Type:</strong> Guide
-                        </p>
-                        <p>
-                            <strong>Date:</strong> 5 September 2026
-                        </p>
-                    </div>
-
-                    <a href="#" class="view-resource">
-                        View Resource
-                    </a>
-                </article>
-
-                <!-- Resource 4 -->
-                <article class="resource-card">
-                    <span class="resource-category">College</span>
-
-                    <h3 class="resource-title">
-                        Student Handbook
-                    </h3>
-
-                    <p class="resource-description">
-                        Important information about college rules,
-                        facilities, academic procedures, and student services.
-                    </p>
-
-                    <div class="resource-details">
-                        <p>
-                            <strong>Type:</strong> Handbook
-                        </p>
-                        <p>
-                            <strong>Date:</strong> 1 September 2026
-                        </p>
-                    </div>
-
-                    <a href="#" class="view-resource">
-                        View Resource
-                    </a>
-                </article>
-
             </section>
 
         </main>
 
     </div>
-        <script src="{{ url_for('static', filename='js/resources.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/resources.js') }}"></script>
+
 </body>
 </html>

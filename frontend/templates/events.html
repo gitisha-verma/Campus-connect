@@ -1,135 +1,82 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Campus Events</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
 </head>
+
 <body>
-<div class="events-container">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <h1>Campus Connect</h1>
+    <div class="events-container">
 
-        <nav>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/notices">Notices</a>
-            <a href="/events">Events</a>
-        </nav>
-    </aside>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h1>Campus Connect</h1>
 
-    <!-- Main Content -->
-    <main class="main-content">
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/notices">Notices</a>
+                <a href="/events">Events</a>
+                <a href="/resources">Resources</a>
+                <a href="#">Logout</a>
+            </nav>
+        </aside>
 
-        <div class="events-header">
-            <h2>Campus Events</h2>
-            <p>View upcoming events happening on campus.</p>
-        </div>
+        <!-- Main Content -->
+        <main class="main-content">
 
-        <div class="events-controls">
-
-            <div class="search-box">
-                <label for="event-search">Search Events</label>
-                <input
-                    type="text"
-                    id="event-search"
-                    placeholder="Search events..."
-                >
+            <div class="events-header">
+                <h2>Campus Events</h2>
+                <p>View upcoming events happening on campus.</p>
             </div>
 
-            <div class="filter-box">
-                <label for="event-category">Category</label>
-                <select id="event-category">
-                    <option value="all">All Categories</option>
-                    <option value="academic">Academic</option>
-                    <option value="cultural">Cultural</option>
-                    <option value="sports">Sports</option>
-                    <option value="workshop">Workshop</option>
-                </select>
+            <div class="events-controls">
+
+                <div class="search-box">
+                    <label for="event-search">Search Events</label>
+                    <input
+                        type="text"
+                        id="event-search"
+                        placeholder="Search events..."
+                    >
+                </div>
+
+                <div class="filter-box">
+                    <label for="event-category">Category</label>
+                    <select id="event-category">
+                        <option value="all">All Categories</option>
+                        <option value="academic">Academic</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="sports">Sports</option>
+                        <option value="workshop">Workshop</option>
+                    </select>
+                </div>
+
+                <div class="filter-box">
+                    <label for="event-date">Date</label>
+                    <select id="event-date">
+                        <option value="all">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+
             </div>
 
-            <div class="filter-box">
-                <label for="event-date">Date</label>
-                <select id="event-date">
-                    <option value="all">All Dates</option>
-                    <option value="today">Today</option>
-                    <option value="week">This Week</option>
-                    <option value="month">This Month</option>
-                </select>
+            <!-- Events are loaded from the database using JavaScript -->
+            <div class="events-list">
             </div>
 
-        </div>
+        </main>
 
-        <div class="events-list">
+    </div>
 
-            <article class="event-card">
-                <span class="event-category">Academic</span>
-                <h3>Annual Science Exhibition</h3>
-                <p class="event-description">
-                    Explore innovative projects and scientific ideas presented by students.
-                </p>
-
-                <div class="event-details">
-                    <p><strong>Date:</strong> 15 October 2026</p>
-                    <p><strong>Time:</strong> 10:00 AM - 2:00 PM</p>
-                    <p><strong>Location:</strong> College Auditorium</p>
-                </div>
-            </article>
-
-            <article class="event-card">
-                <span class="event-category">Cultural</span>
-                <h3>Campus Cultural Fest</h3>
-                <p class="event-description">
-                    Enjoy music, dance, art, and cultural performances by students.
-                </p>
-
-                <div class="event-details">
-                    <p><strong>Date:</strong> 20 October 2026</p>
-                    <p><strong>Time:</strong> 4:00 PM - 8:00 PM</p>
-                    <p><strong>Location:</strong> Main Ground</p>
-                </div>
-            </article>
-
-            <article class="event-card">
-                <span class="event-category">Workshop</span>
-                <h3>Web Development Workshop</h3>
-                <p class="event-description">
-                    Learn the fundamentals of modern web development through a practical workshop.
-                </p>
-
-                <div class="event-details">
-                    <p><strong>Date:</strong> 25 October 2026</p>
-                    <p><strong>Time:</strong> 11:00 AM - 1:00 PM</p>
-                    <p><strong>Location:</strong> Computer Lab 2</p>
-                </div>
-            </article>
-
-            <article class="event-card">
-                <span class="event-category">Sports</span>
-                <h3>Inter-College Sports Meet</h3>
-                <p class="event-description">
-                    Participate in exciting sports competitions and represent your college.
-                </p>
-
-                <div class="event-details">
-                    <p><strong>Date:</strong> 30 October 2026</p>
-                    <p><strong>Time:</strong> 9:00 AM - 4:00 PM</p>
-                    <p><strong>Location:</strong> College Sports Ground</p>
-                </div>
-            </article>
-
-        </div>
-
-    </main>
-
-</div>
-
-<script src="{{ url_for('static', filename='js/events.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events.js') }}"></script>
 
 </body>
 </html>
