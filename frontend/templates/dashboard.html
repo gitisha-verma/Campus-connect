@@ -18,7 +18,8 @@
                 <a href="/events">Events</a>
                 <a href="/notices">Notices</a>
                 <a href="/resources">Resources</a>
-                <a href="#">Logout</a>
+                <a href="/discussion">Discussion Board</a>
+                <a href="/logout">Logout</a>
             </nav>
         </aside>
 
@@ -32,17 +33,17 @@
 
                 <div class="card">
                     <h3>Upcoming Events</h3>
-                    <p>3 Events</p>
+                    <p id="event-count">0 Events</p>
                 </div>
 
                 <div class="card">
                     <h3>Latest Notices</h3>
-                    <p>5 New Notices</p>
+                    <p id="notice-count">0 New Notices</p>
                 </div>
 
                 <div class="card">
                     <h3>Study Resources</h3>
-                    <p>12 Resources</p>
+                    <p id="resource-count">0 Resources</p>
                 </div>
 
             </section>
@@ -51,30 +52,12 @@
 
                 <div class="content-box">
                     <h2>Upcoming Events</h2>
-
-                    <div class="item">
-                        <h3>Career Guidance Workshop</h3>
-                        <p>15 September, 10:00 AM</p>
-                    </div>
-
-                    <div class="item">
-                        <h3>Annual Sports Meet</h3>
-                        <p>18 September, 9:00 AM</p>
-                    </div>
+                    <div id="upcoming-events"></div>
                 </div>
 
                 <div class="content-box">
                     <h2>Latest Notices</h2>
-
-                    <div class="item">
-                        <h3>Semester Fee Submission</h3>
-                        <p>Last date: 20 September</p>
-                    </div>
-
-                    <div class="item">
-                        <h3>Library Timing Updated</h3>
-                        <p>The library is now open until 7:00 PM.</p>
-                    </div>
+                    <div id="latest-notices"></div>
                 </div>
 
             </section>

@@ -22,6 +22,7 @@
                 <a href="/events">Events</a>
                 <a href="/resources">Resources</a>
                 <a href="/discussion" class="active">Discussion Board</a>
+                <a href="/logout">Logout</a>
             </nav>
         </aside>
 
@@ -36,32 +37,31 @@
             <article class="discussion-detail" id="discussion-detail">
 
                 <header class="discussion-detail-header">
+
                     <h2 id="discussion-detail-title">
-                        How to prepare for the upcoming semester exams?
+                        {{ discussion['title'] }}
                     </h2>
 
                     <div class="discussion-detail-meta">
+
                         <span id="discussion-detail-author">
-                            By Ananya Sharma
+                            By {{ discussion['author'] }}
                         </span>
 
                         <span id="discussion-detail-date">
-                            25 September 2026, 10:30 AM
+                            {{ discussion['created_at'] }}
                         </span>
+
                     </div>
+
                 </header>
 
                 <div class="discussion-content" id="discussion-content">
-                    <p>
-                        Does anyone have useful study tips or resources
-                        for preparing for the upcoming semester exams?
-                    </p>
 
                     <p>
-                        I am especially looking for suggestions about
-                        planning a study schedule and revising important
-                        topics before the examinations.
+                        {{ discussion['content'] }}
                     </p>
+
                 </div>
 
             </article>
@@ -72,52 +72,39 @@
 
                 <div class="replies-list" id="replies-list">
 
-                    <article class="reply-card" data-reply-id="1">
+                    {% for reply in replies %}
 
-                        <div class="reply-meta">
-                            <span class="reply-author">
-                                Rahul Verma
-                            </span>
+                        <article class="reply-card"
+                                 data-reply-id="{{ reply['id'] }}">
 
-                            <span class="reply-date">
-                                25 September 2026, 11:15 AM
-                            </span>
+                            <div class="reply-meta">
+
+                                <span class="reply-author">
+                                    {{ reply['author'] }}
+                                </span>
+
+                                <span class="reply-date">
+                                    {{ reply['created_at'] }}
+                                </span>
+
+                            </div>
+
+                            <p class="reply-content">
+                                {{ reply['content'] }}
+                            </p>
+
+                        </article>
+
+                    {% else %}
+
+                        <div class="replies-empty-state">
+                            <p>
+                                No replies yet. Be the first student to reply.
+                            </p>
                         </div>
 
-                        <p class="reply-content">
-                            I usually make a topic-wise study plan and
-                            revise the difficult topics first. Solving
-                            previous question papers also helps.
-                        </p>
+                    {% endfor %}
 
-                    </article>
-
-                    <article class="reply-card" data-reply-id="2">
-
-                        <div class="reply-meta">
-                            <span class="reply-author">
-                                Priya Singh
-                            </span>
-
-                            <span class="reply-date">
-                                25 September 2026, 12:05 PM
-                            </span>
-                        </div>
-
-                        <p class="reply-content">
-                            You can also check the study resources section.
-                            There are some useful notes and preparation
-                            materials available there.
-                        </p>
-
-                    </article>
-
-                </div>
-
-                <div class="replies-empty-state" id="replies-empty-state" hidden>
-                    <p>
-                        No replies yet. Be the first student to reply.
-                    </p>
                 </div>
 
             </section>
@@ -129,11 +116,12 @@
                 <form
                     id="reply-form"
                     class="reply-form"
-                    action="#"
+                    action="{{ url_for('discussion_detail', discussion_id=discussion['id']) }}"
                     method="post"
                 >
 
                     <div class="form-group">
+
                         <label for="reply-content">
                             Your Reply
                         </label>
@@ -143,7 +131,6 @@
                             name="reply"
                             rows="6"
                             placeholder="Write your reply here..."
-                            required
                         ></textarea>
 
                         <small
@@ -151,9 +138,11 @@
                             class="form-error"
                             aria-live="polite"
                         ></small>
+
                     </div>
 
                     <div class="form-actions">
+
                         <button
                             type="submit"
                             id="submit-reply-button"
@@ -161,6 +150,7 @@
                         >
                             Submit Reply
                         </button>
+
                     </div>
 
                 </form>
@@ -170,6 +160,8 @@
         </main>
 
     </div>
+
     <script src="{{ url_for('static', filename='js/discussion.js') }}"></script>
+
 </body>
 </html>

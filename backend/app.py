@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify, render_template, session, send_from_directory
+from flask import Flask, request, jsonify, render_template, session, send_from_directory, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+from datetime import datetime
 
 app = Flask(
     __name__,
@@ -67,6 +68,7 @@ def login():
         return jsonify({"message": "Invalid email or password"}), 401
 
     session["student_name"] = user["name"]
+    session["user_id"] = user["id"]
 
     return jsonify({
         "message": "Login successful",
@@ -84,7 +86,17 @@ def dashboard_data():
 
 @app.route("/dashboard")
 def dashboard():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("dashboard.html")
+
+
+# Logout
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login_page"))
 
 
 # Feature 3 - Notices API
@@ -104,6 +116,9 @@ def get_notices():
 # Feature 3 - Notices page
 @app.route("/notices")
 def notices_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("notices.html")
 
 
@@ -124,6 +139,9 @@ def get_events():
 # Feature 4 - Events page
 @app.route("/events")
 def events_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("events.html")
 
 
@@ -144,7 +162,197 @@ def get_resources():
 # Feature 5 - Resources page
 @app.route("/resources")
 def resources_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
     return render_template("resources.html")
+
+
+# Feature 6 - Discussion Board API
+@app.route("/api/discussions")
+def get_discussions():
+    conn = get_db_connection()
+
+    discussions = conn.execute(
+        """
+        SELECT
+            discussions.id,
+            discussions.title,
+            discussions.content,
+            discussions.created_at,
+            users.name AS author
+        FROM discussions
+        JOIN users ON discussions.user_id = users.id
+        ORDER BY discussions.created_at DESC
+        """
+    ).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(discussion) for discussion in discussions])
+
+
+# Feature 6 - Discussion Board page
+@app.route("/discussion")
+def discussion_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
+    conn = get_db_connection()
+
+    discussions = conn.execute(
+        """
+        SELECT
+            discussions.id,
+            discussions.title,
+            discussions.content,
+            discussions.created_at,
+            users.name AS author
+        FROM discussions
+        JOIN users ON discussions.user_id = users.id
+        ORDER BY discussions.created_at DESC
+        """
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "discussion.html",
+        discussions=discussions
+    )
+
+
+# Feature 6 - Create Discussion page
+@app.route("/discussion/create", methods=["GET", "POST"])
+def create_discussion_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
+    if request.method == "POST":
+
+        title = request.form.get("title", "").strip()
+        content = request.form.get("content", "").strip()
+
+        if title == "" or content == "":
+            return render_template("create_discussion.html")
+
+        conn = get_db_connection()
+
+        conn.execute(
+            """
+            INSERT INTO discussions
+            (user_id, title, content, created_at)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                session["user_id"],
+                title,
+                content,
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("discussion_page"))
+
+    return render_template("create_discussion.html")
+
+
+# Feature 6 - Discussion Detail page
+@app.route("/discussion/<int:discussion_id>", methods=["GET", "POST"])
+def discussion_detail(discussion_id):
+
+    # Only logged-in students can access the discussion detail page
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
+    if request.method == "POST":
+
+        reply = request.form.get("reply", "").strip()
+
+        if reply != "":
+            conn = get_db_connection()
+
+            discussion = conn.execute(
+                "SELECT id FROM discussions WHERE id = ?",
+                (discussion_id,)
+            ).fetchone()
+
+            if discussion is None:
+                conn.close()
+                return "Discussion not found", 404
+
+            conn.execute(
+                """
+                INSERT INTO replies
+                (discussion_id, user_id, content, created_at)
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    discussion_id,
+                    session["user_id"],
+                    reply,
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
+            )
+
+            conn.commit()
+            conn.close()
+
+        return redirect(
+            url_for(
+                "discussion_detail",
+                discussion_id=discussion_id
+            )
+        )
+
+    conn = get_db_connection()
+
+    discussion = conn.execute(
+        """
+        SELECT
+            discussions.id,
+            discussions.title,
+            discussions.content,
+            discussions.created_at,
+            users.name AS author
+        FROM discussions
+        JOIN users ON discussions.user_id = users.id
+        WHERE discussions.id = ?
+        """,
+        (discussion_id,)
+    ).fetchone()
+
+    if discussion is None:
+        conn.close()
+        return "Discussion not found", 404
+
+    replies = conn.execute(
+        """
+        SELECT
+            replies.id,
+            replies.content,
+            replies.created_at,
+            users.name AS author
+        FROM replies
+        JOIN users ON replies.user_id = users.id
+        WHERE replies.discussion_id = ?
+        ORDER BY replies.created_at ASC
+        """,
+        (discussion_id,)
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "discussion_detail.html",
+        discussion=discussion,
+        replies=replies
+    )
 
 
 # Feature 3 - Notices JavaScript
