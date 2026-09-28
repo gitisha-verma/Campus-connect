@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Student Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+
+<body>
+
+    <div class="profile-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <h1>Campus Connect</h1>
+
+            <nav aria-label="Main navigation">
+
+                <a href="/dashboard">Dashboard</a>
+
+                <a href="/notices">Notices</a>
+
+                <a href="/events">Events</a>
+
+                <a href="/resources">Resources</a>
+
+                <a href="/discussion">Discussion Board</a>
+
+                <a href="/profile"
+                   class="active"
+                   aria-current="page">
+                    Profile
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Page Header -->
+            <section class="profile-header">
+
+                <div>
+                    <p class="page-label">
+                        Student Account
+                    </p>
+
+                    <h2>Student Profile</h2>
+
+                    <p>
+                        View and manage your basic Campus Connect
+                        profile information.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="button button-primary"
+                    id="edit-profile-button">
+
+                    Edit Profile
+
+                </button>
+
+            </section>
+
+
+            <!-- Profile Information -->
+            <section
+                class="profile-card"
+                aria-labelledby="profile-information-heading">
+
+                <div class="card-heading">
+
+                    <h3 id="profile-information-heading">
+                        Profile Information
+                    </h3>
+
+                    <p>
+                        Your basic student account information.
+                    </p>
+
+                </div>
+
+
+                <div class="profile-details">
+
+                    <div class="profile-detail">
+
+                        <span class="detail-label">
+                            Student Name
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="profile-name">
+
+                            Student Name
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="profile-detail">
+
+                        <span class="detail-label">
+                            Student Email
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="profile-email">
+
+                            student@example.com
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Edit Profile -->
+            <section
+                class="profile-card edit-card"
+                id="edit-profile-section"
+                hidden
+                aria-labelledby="edit-profile-heading">
+
+                <div class="card-heading">
+
+                    <h3 id="edit-profile-heading">
+                        Edit Profile
+                    </h3>
+
+                    <p>
+                        Update your editable profile information.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="profile-form"
+                    action="#"
+                    method="post">
+
+                    <div class="form-grid">
+
+                        <!-- Student Name -->
+                        <div class="form-group">
+
+                            <label for="student-name">
+                                Student Name
+                            </label>
+
+                            <input
+                                id="student-name"
+                                name="name"
+                                type="text"
+                                value="Student Name"
+                                placeholder="Enter your name"
+                                autocomplete="name"
+                                required>
+
+                        </div>
+
+
+                        <!-- Student Email -->
+                        <div class="form-group">
+
+                            <label for="student-email">
+                                Student Email
+                            </label>
+
+                            <input
+                                id="student-email"
+                                name="email"
+                                type="email"
+                                value="student@example.com"
+                                autocomplete="email"
+                                readonly>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Form Buttons -->
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="button button-primary">
+
+                            Save / Update
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="button button-secondary"
+                            id="cancel-edit-button">
+
+                            Cancel
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Frontend-only interaction -->
+    <script>
+
+        const editButton =
+            document.getElementById("edit-profile-button");
+
+        const cancelButton =
+            document.getElementById("cancel-edit-button");
+
+        const editSection =
+            document.getElementById("edit-profile-section");
+
+        const profileForm =
+            document.getElementById("profile-form");
+
+        const nameValue =
+            document.getElementById("profile-name");
+
+        const nameInput =
+            document.getElementById("student-name");
+
+
+        // Open Edit Profile
+        editButton.addEventListener("click", function () {
+
+            editSection.hidden = false;
+
+            editButton.hidden = true;
+
+            nameInput.focus();
+
+        });
+
+
+        // Cancel editing
+        cancelButton.addEventListener("click", function () {
+
+            editSection.hidden = true;
+
+            editButton.hidden = false;
+
+        });
+
+
+        /*
+         * Temporary frontend-only behavior.
+         *
+         * Gitisha can replace this later with
+         * the Flask API request.
+         */
+        profileForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            const updatedName =
+                nameInput.value.trim();
+
+            if (updatedName) {
+
+                nameValue.textContent = updatedName;
+
+            }
+
+            editSection.hidden = true;
+
+            editButton.hidden = false;
+
+        });
+
+    </script>
+
+</body>
+</html>
