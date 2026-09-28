@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Discussion Board</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
+</head>
+
+<body>
+
+    <div class="discussion-container">
+
+        <aside class="sidebar">
+            <h1>Campus Connect</h1>
+
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/notices">Notices</a>
+                <a href="/events">Events</a>
+                <a href="/resources">Resources</a>
+                <a href="/discussion" class="active">Discussion Board</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <section class="discussion-header">
+                <div>
+                    <h2>Discussion Board</h2>
+                    <p>
+                        Ask questions, share information, and discuss
+                        college-related topics with other students.
+                    </p>
+                </div>
+
+                <a href="/discussion/create" class="create-discussion-button">
+                    Create New Discussion
+                </a>
+            </section>
+
+            <section class="discussion-list-section">
+
+                <h2>Recent Discussions</h2>
+
+                <div class="discussion-list" id="discussion-list">
+
+                    <article class="discussion-card" data-discussion-id="1">
+                        <h3 class="discussion-title">
+                            How to prepare for the upcoming semester exams?
+                        </h3>
+
+                        <p class="discussion-preview">
+                            Does anyone have useful study tips or resources
+                            for preparing for the upcoming semester exams?
+                        </p>
+
+                        <div class="discussion-meta">
+                            <span class="discussion-author">
+                                By Ananya Sharma
+                            </span>
+                            <span class="discussion-date">
+                                25 September 2026, 10:30 AM
+                            </span>
+                        </div>
+
+                        <a href="/discussion/1" class="view-discussion">
+                            View Discussion
+                        </a>
+                    </article>
+
+                    <article class="discussion-card" data-discussion-id="2">
+                        <h3 class="discussion-title">
+                            Best places to study on campus
+                        </h3>
+
+                        <p class="discussion-preview">
+                            Which places on campus are quiet and suitable
+                            for studying between classes?
+                        </p>
+
+                        <div class="discussion-meta">
+                            <span class="discussion-author">
+                                By Rahul Verma
+                            </span>
+                            <span class="discussion-date">
+                                24 September 2026, 3:15 PM
+                            </span>
+                        </div>
+
+                        <a href="/discussion/2" class="view-discussion">
+                            View Discussion
+                        </a>
+                    </article>
+
+                    <article class="discussion-card" data-discussion-id="3">
+                        <h3 class="discussion-title">
+                            Question about the Web Development Workshop
+                        </h3>
+
+                        <p class="discussion-preview">
+                            Does anyone know if students need to register
+                            before attending the Web Development Workshop?
+                        </p>
+
+                        <div class="discussion-meta">
+                            <span class="discussion-author">
+                                By Priya Singh
+                            </span>
+                            <span class="discussion-date">
+                                23 September 2026, 11:45 AM
+                            </span>
+                        </div>
+
+                        <a href="/discussion/3" class="view-discussion">
+                            View Discussion
+                        </a>
+                    </article>
+
+                    <article class="discussion-card" data-discussion-id="4">
+                        <h3 class="discussion-title">
+                            Sharing useful programming resources
+                        </h3>
+
+                        <p class="discussion-preview">
+                            I found some helpful programming practice
+                            materials and wanted to share them with everyone.
+                        </p>
+
+                        <div class="discussion-meta">
+                            <span class="discussion-author">
+                                By Arjun Mehta
+                            </span>
+                            <span class="discussion-date">
+                                22 September 2026, 5:20 PM
+                            </span>
+                        </div>
+
+                        <a href="/discussion/4" class="view-discussion">
+                            View Discussion
+                        </a>
+                    </article>
+
+                </div>
+
+                <div class="discussion-empty-state" id="discussion-empty-state" hidden>
+                    <h3>No discussions yet</h3>
+                    <p>
+                        There are no discussions to display.
+                        Start the conversation by creating a new discussion.
+                    </p>
+                    <a href="/discussion/create" class="create-discussion-button">
+                        Create New Discussion
+                    </a>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

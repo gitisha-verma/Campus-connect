@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Create Discussion</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
+</head>
+
+<body>
+
+    <div class="discussion-container">
+
+        <aside class="sidebar">
+            <h1>Campus Connect</h1>
+
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/notices">Notices</a>
+                <a href="/events">Events</a>
+                <a href="/resources">Resources</a>
+                <a href="/discussion">Discussion Board</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <section class="discussion-form-section">
+
+                <div class="page-navigation">
+                    <a href="/discussion" class="back-link">
+                        &larr; Back to Discussion Board
+                    </a>
+                </div>
+
+                <div class="discussion-form-header">
+                    <h2>Create New Discussion</h2>
+                    <p>
+                        Ask a question, share information, or start a
+                        conversation with other students.
+                    </p>
+                </div>
+
+                <form
+                    id="create-discussion-form"
+                    class="discussion-form"
+                    action="#"
+                    method="post"
+                >
+
+                    <div class="form-group">
+                        <label for="discussion-title">
+                            Discussion Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="discussion-title"
+                            name="title"
+                            placeholder="Enter your discussion title"
+                            required
+                        >
+
+                        <small
+                            id="discussion-title-error"
+                            class="form-error"
+                            aria-live="polite"
+                        ></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discussion-content">
+                            Discussion Content
+                        </label>
+
+                        <textarea
+                            id="discussion-content"
+                            name="content"
+                            rows="8"
+                            placeholder="Write your question or discussion here..."
+                            required
+                        ></textarea>
+
+                        <small
+                            id="discussion-content-error"
+                            class="form-error"
+                            aria-live="polite"
+                        ></small>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/discussion" class="cancel-button">
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            id="create-discussion-button"
+                            class="create-discussion-button"
+                        >
+                            Create Discussion
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
