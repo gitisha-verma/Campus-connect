@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Discussion</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/discussion.css') }}">
+</head>
+
+<body>
+
+    <div class="discussion-container">
+
+        <aside class="sidebar">
+            <h1>Campus Connect</h1>
+
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/notices">Notices</a>
+                <a href="/events">Events</a>
+                <a href="/resources">Resources</a>
+                <a href="/discussion" class="active">Discussion Board</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="page-navigation">
+                <a href="/discussion" class="back-link">
+                    &larr; Back to Discussion Board
+                </a>
+            </div>
+
+            <article class="discussion-detail" id="discussion-detail">
+
+                <header class="discussion-detail-header">
+                    <h2 id="discussion-detail-title">
+                        How to prepare for the upcoming semester exams?
+                    </h2>
+
+                    <div class="discussion-detail-meta">
+                        <span id="discussion-detail-author">
+                            By Ananya Sharma
+                        </span>
+
+                        <span id="discussion-detail-date">
+                            25 September 2026, 10:30 AM
+                        </span>
+                    </div>
+                </header>
+
+                <div class="discussion-content" id="discussion-content">
+                    <p>
+                        Does anyone have useful study tips or resources
+                        for preparing for the upcoming semester exams?
+                    </p>
+
+                    <p>
+                        I am especially looking for suggestions about
+                        planning a study schedule and revising important
+                        topics before the examinations.
+                    </p>
+                </div>
+
+            </article>
+
+            <section class="replies-section" id="replies-section">
+
+                <h2>Replies</h2>
+
+                <div class="replies-list" id="replies-list">
+
+                    <article class="reply-card" data-reply-id="1">
+
+                        <div class="reply-meta">
+                            <span class="reply-author">
+                                Rahul Verma
+                            </span>
+
+                            <span class="reply-date">
+                                25 September 2026, 11:15 AM
+                            </span>
+                        </div>
+
+                        <p class="reply-content">
+                            I usually make a topic-wise study plan and
+                            revise the difficult topics first. Solving
+                            previous question papers also helps.
+                        </p>
+
+                    </article>
+
+                    <article class="reply-card" data-reply-id="2">
+
+                        <div class="reply-meta">
+                            <span class="reply-author">
+                                Priya Singh
+                            </span>
+
+                            <span class="reply-date">
+                                25 September 2026, 12:05 PM
+                            </span>
+                        </div>
+
+                        <p class="reply-content">
+                            You can also check the study resources section.
+                            There are some useful notes and preparation
+                            materials available there.
+                        </p>
+
+                    </article>
+
+                </div>
+
+                <div class="replies-empty-state" id="replies-empty-state" hidden>
+                    <p>
+                        No replies yet. Be the first student to reply.
+                    </p>
+                </div>
+
+            </section>
+
+            <section class="reply-form-section" id="reply-form-section">
+
+                <h2>Write a Reply</h2>
+
+                <form
+                    id="reply-form"
+                    class="reply-form"
+                    action="#"
+                    method="post"
+                >
+
+                    <div class="form-group">
+                        <label for="reply-content">
+                            Your Reply
+                        </label>
+
+                        <textarea
+                            id="reply-content"
+                            name="reply"
+                            rows="6"
+                            placeholder="Write your reply here..."
+                            required
+                        ></textarea>
+
+                        <small
+                            id="reply-content-error"
+                            class="form-error"
+                            aria-live="polite"
+                        ></small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button
+                            type="submit"
+                            id="submit-reply-button"
+                            class="create-discussion-button"
+                        >
+                            Submit Reply
+                        </button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
