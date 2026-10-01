@@ -355,6 +355,101 @@ def discussion_detail(discussion_id):
     )
 
 
+# Feature 7 - Student Profile page
+@app.route("/profile")
+def profile_page():
+    if "user_id" not in session:
+        return redirect(url_for("login_page"))
+
+    return render_template("profile.html")
+
+
+# Feature 7 - Student Profile API
+@app.route("/api/profile", methods=["GET"])
+def get_profile():
+    if "user_id" not in session:
+        return jsonify({"message": "Unauthorized"}), 401
+
+    conn = get_db_connection()
+
+    user = conn.execute(
+        "SELECT id, name, email FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    conn.close()
+
+    if user is None:
+        return jsonify({"message": "Student profile not found"}), 404
+
+    return jsonify({
+        "id": user["id"],
+        "name": user["name"],
+        "email": user["email"]
+    })
+
+
+# Feature 7 - Update Student Profile API
+@app.route("/api/profile", methods=["PUT"])
+def update_profile():
+    if "user_id" not in session:
+        return jsonify({"message": "Unauthorized"}), 401
+
+    data = request.get_json(silent=True) or {}
+
+    name = data.get("name", "").strip()
+
+    if not name:
+        return jsonify({
+            "message": "Student name cannot be empty."
+        }), 400
+
+    if len(name) < 2:
+        return jsonify({
+            "message": "Please enter a valid student name."
+        }), 400
+
+    has_letter = any(character.isalpha() for character in name)
+    has_invalid_characters = any(
+        character.isdigit() or character in "<>"
+        for character in name
+    )
+
+    if not has_letter or has_invalid_characters:
+        return jsonify({
+            "message": "Please enter a valid student name."
+        }), 400
+
+    conn = get_db_connection()
+
+    user = conn.execute(
+        "SELECT id FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+
+    if user is None:
+        conn.close()
+        return jsonify({
+            "message": "Student profile not found"
+        }), 404
+
+    conn.execute(
+        "UPDATE users SET name = ? WHERE id = ?",
+        (name, session["user_id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    # Keep the current session name synchronized with the database.
+    session["student_name"] = name
+
+    return jsonify({
+        "message": "Profile updated successfully",
+        "name": name
+    })
+
+
 # Feature 3 - Notices JavaScript
 @app.route("/notices.js")
 def notices_js():

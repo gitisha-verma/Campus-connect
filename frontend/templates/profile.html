@@ -37,6 +37,10 @@
                     Profile
                 </a>
 
+                <a href="/logout">
+                    Logout
+                </a>
+
             </nav>
 
         </aside>
@@ -229,76 +233,8 @@
     </div>
 
 
-    <!-- Frontend-only interaction -->
-    <script>
-
-        const editButton =
-            document.getElementById("edit-profile-button");
-
-        const cancelButton =
-            document.getElementById("cancel-edit-button");
-
-        const editSection =
-            document.getElementById("edit-profile-section");
-
-        const profileForm =
-            document.getElementById("profile-form");
-
-        const nameValue =
-            document.getElementById("profile-name");
-
-        const nameInput =
-            document.getElementById("student-name");
-
-
-        // Open Edit Profile
-        editButton.addEventListener("click", function () {
-
-            editSection.hidden = false;
-
-            editButton.hidden = true;
-
-            nameInput.focus();
-
-        });
-
-
-        // Cancel editing
-        cancelButton.addEventListener("click", function () {
-
-            editSection.hidden = true;
-
-            editButton.hidden = false;
-
-        });
-
-
-        /*
-         * Temporary frontend-only behavior.
-         *
-         * Gitisha can replace this later with
-         * the Flask API request.
-         */
-        profileForm.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-            const updatedName =
-                nameInput.value.trim();
-
-            if (updatedName) {
-
-                nameValue.textContent = updatedName;
-
-            }
-
-            editSection.hidden = true;
-
-            editButton.hidden = false;
-
-        });
-
-    </script>
+    <!-- Feature 7 - Student Profile JavaScript -->
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 
 </body>
 </html>
