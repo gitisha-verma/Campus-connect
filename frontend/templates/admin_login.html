@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Admin Login</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_login.css') }}">
+</head>
+
+<body>
+    <main class="admin-login-page">
+        <section class="admin-login-card" aria-labelledby="admin-login-title">
+
+            <header class="admin-login-header">
+                <p class="brand-name">Campus Connect</p>
+                <p class="admin-badge">Administrator Portal</p>
+
+                <h1 id="admin-login-title">Admin Login</h1>
+
+                <p class="login-description">
+                    Sign in to access the Campus Connect administration portal.
+                </p>
+            </header>
+
+            <form class="admin-login-form" method="POST">
+
+                <div class="form-group">
+                    <label for="admin-username">Email or Username</label>
+                    <input
+                        type="text"
+                        id="admin-username"
+                        name="username"
+                        placeholder="Enter your email or username"
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input
+                        type="password"
+                        id="admin-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <div
+                    class="form-message"
+                    id="admin-login-message"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+                <button type="submit" class="login-button">
+                    Login
+                </button>
+            </form>
+
+            <footer class="admin-login-footer">
+                <p>Are you a student?</p>
+                <a href="{{ url_for('login') }}">Return to Student Login</a>
+            </footer>
+
+        </section>
+    </main>
+</body>
+</html>
