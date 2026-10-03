@@ -77,6 +77,55 @@ def login():
     })
 
 
+# Feature 8.1 - Admin Login
+@app.route("/admin-login", methods=["GET", "POST"])
+def admin_login():
+
+    if request.method == "GET":
+        return render_template("admin_login.html")
+
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+
+    if not username or not password:
+        return jsonify({
+            "message": "Email and password are required."
+        }), 400
+
+    conn = get_db_connection()
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE email = ?",
+        (username,)
+    ).fetchone()
+
+    conn.close()
+
+    if user is None:
+        return jsonify({
+            "message": "Invalid admin credentials."
+        }), 401
+
+    if not check_password_hash(user["password"], password):
+        return jsonify({
+            "message": "Invalid admin credentials."
+        }), 401
+
+    if user["role"] != "admin":
+        return jsonify({
+            "message": "Access denied. Admin account required."
+        }), 403
+
+    session["admin_id"] = user["id"]
+    session["admin_name"] = user["name"]
+    session["admin_role"] = user["role"]
+
+    return jsonify({
+        "message": "Admin login successful",
+        "name": user["name"]
+    })
+
+
 @app.route("/dashboard-data")
 def dashboard_data():
     return jsonify({
@@ -342,8 +391,7 @@ def discussion_detail(discussion_id):
         JOIN users ON replies.user_id = users.id
         WHERE replies.discussion_id = ?
         ORDER BY replies.created_at ASC
-        """,
-        (discussion_id,)
+        """
     ).fetchall()
 
     conn.close()
@@ -380,7 +428,9 @@ def get_profile():
     conn.close()
 
     if user is None:
-        return jsonify({"message": "Student profile not found"}), 404
+        return jsonify({
+            "message": "Student profile not found"
+        }), 404
 
     return jsonify({
         "id": user["id"],
@@ -410,6 +460,7 @@ def update_profile():
         }), 400
 
     has_letter = any(character.isalpha() for character in name)
+
     has_invalid_characters = any(
         character.isdigit() or character in "<>"
         for character in name
@@ -429,6 +480,7 @@ def update_profile():
 
     if user is None:
         conn.close()
+
         return jsonify({
             "message": "Student profile not found"
         }), 404
