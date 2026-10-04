@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+</head>
+
+<body>
+
+    <div class="admin-dashboard">
+
+        <!-- Admin Sidebar -->
+        <aside class="admin-sidebar">
+
+            <div class="sidebar-brand">
+                <h1>Campus Connect</h1>
+                <p>Administrator Portal</p>
+            </div>
+
+            <nav class="admin-navigation" aria-label="Administrator navigation">
+                <a href="#" class="nav-link active">
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span>Notices</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span>Events</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span>Resources</span>
+                </a>
+
+                <a href="#" class="nav-link">
+                    <span>Discussions</span>
+                </a>
+
+                <a href="#" class="nav-link logout-link">
+                    <span>Logout</span>
+                </a>
+            </nav>
+
+        </aside>
+
+
+        <!-- Main Dashboard Content -->
+        <main class="admin-main">
+
+            <!-- Header -->
+            <header class="admin-header">
+
+                <div>
+                    <p class="portal-label">Administrator Portal</p>
+                    <h2>Admin Dashboard</h2>
+                    <p class="dashboard-description">
+                        Manage and monitor Campus Connect activities from one place.
+                    </p>
+                </div>
+
+                <div class="admin-user">
+                    <span class="admin-user-label">Logged in as</span>
+                    <strong id="admin-name">
+                        {{ admin_name|default('Administrator') }}
+                    </strong>
+                </div>
+
+            </header>
+
+
+            <!-- Statistics -->
+            <section class="dashboard-section" aria-labelledby="statistics-title">
+
+                <div class="section-heading">
+                    <h3 id="statistics-title">Dashboard Overview</h3>
+                    <p>Current Campus Connect statistics.</p>
+                </div>
+
+                <div class="statistics-grid">
+
+                    <article class="stat-card">
+                        <div class="stat-card-content">
+                            <p class="stat-label">Total Students</p>
+                            <p class="stat-value" id="total-students">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-card-content">
+                            <p class="stat-label">Total Notices</p>
+                            <p class="stat-value" id="total-notices">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-card-content">
+                            <p class="stat-label">Total Events</p>
+                            <p class="stat-value" id="total-events">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-card-content">
+                            <p class="stat-label">Total Resources</p>
+                            <p class="stat-value" id="total-resources">0</p>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-card-content">
+                            <p class="stat-label">Total Discussions</p>
+                            <p class="stat-value" id="total-discussions">0</p>
+                        </div>
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- Quick Actions -->
+            <section class="dashboard-section" aria-labelledby="quick-actions-title">
+
+                <div class="section-heading">
+                    <h3 id="quick-actions-title">Quick Actions</h3>
+                    <p>Access common administrative tasks.</p>
+                </div>
+
+                <div class="quick-actions-grid">
+
+                    <a href="#" class="action-card">
+                        <span class="action-title">Manage Notices</span>
+                        <span class="action-description">
+                            Create and manage campus notices.
+                        </span>
+                    </a>
+
+                    <a href="#" class="action-card">
+                        <span class="action-title">Manage Events</span>
+                        <span class="action-description">
+                            Manage upcoming campus events.
+                        </span>
+                    </a>
+
+                    <a href="#" class="action-card">
+                        <span class="action-title">Manage Resources</span>
+                        <span class="action-description">
+                            Organize and manage learning resources.
+                        </span>
+                    </a>
+
+                    <a href="#" class="action-card">
+                        <span class="action-title">Manage Discussions</span>
+                        <span class="action-description">
+                            Monitor and manage discussion activity.
+                        </span>
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- Integration Placeholder -->
+            <section class="dashboard-section integration-section">
+
+                <div class="integration-placeholder">
+                    <h3>Admin Dashboard Integration</h3>
+                    <p>
+                        Statistics and administrative actions will be connected
+                        to the Flask backend and database.
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
+</body>
+</html>
