@@ -48,9 +48,40 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
         if (!validateForm()) {
-            event.preventDefault();
+            return;
+        }
+
+        const formData = new FormData(loginForm);
+
+        try {
+            const response = await fetch(loginForm.action, {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                messageArea.textContent = data.message || "Login failed.";
+                return;
+            }
+
+            if (data.message) {
+                messageArea.textContent = data.message;
+            }
+
+        } catch (error) {
+            messageArea.textContent =
+                "Unable to connect to the server. Please try again.";
         }
     });
 
