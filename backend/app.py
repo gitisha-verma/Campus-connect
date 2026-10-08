@@ -120,10 +120,59 @@ def admin_login():
     session["admin_name"] = user["name"]
     session["admin_role"] = user["role"]
 
-    return jsonify({
-        "message": "Admin login successful",
-        "name": user["name"]
-    })
+    return redirect(url_for("admin_dashboard"))
+
+
+# Feature 8.2 - Admin Dashboard
+@app.route("/admin-dashboard")
+def admin_dashboard():
+
+    if session.get("admin_role") != "admin":
+        return redirect(url_for("admin_login"))
+
+    conn = get_db_connection()
+
+    total_students = conn.execute(
+        "SELECT COUNT(*) FROM users WHERE role = 'student'"
+    ).fetchone()[0]
+
+    total_notices = conn.execute(
+        "SELECT COUNT(*) FROM notices"
+    ).fetchone()[0]
+
+    total_events = conn.execute(
+        "SELECT COUNT(*) FROM events"
+    ).fetchone()[0]
+
+    total_resources = conn.execute(
+        "SELECT COUNT(*) FROM resources"
+    ).fetchone()[0]
+
+    total_discussions = conn.execute(
+        "SELECT COUNT(*) FROM discussions"
+    ).fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+        "admin_dashboard.html",
+        admin_name=session.get("admin_name", "Administrator"),
+        total_students=total_students,
+        total_notices=total_notices,
+        total_events=total_events,
+        total_resources=total_resources,
+        total_discussions=total_discussions
+    )
+
+
+# Feature 8.2 - Admin Logout
+@app.route("/admin-logout")
+def admin_logout():
+    session.pop("admin_id", None)
+    session.pop("admin_name", None)
+    session.pop("admin_role", None)
+
+    return redirect(url_for("admin_login"))
 
 
 @app.route("/dashboard-data")
