@@ -19,6 +19,30 @@ def get_db_connection():
     return conn
 
 
+def is_admin_authenticated():
+    """
+    Check whether the current session belongs to an authenticated admin.
+    """
+    return (
+        session.get("admin_id") is not None
+        and session.get("admin_role") == "admin"
+    )
+
+
+def admin_api_unauthorized_response():
+    """
+    Return a JSON authorization error for admin API requests.
+    """
+    return jsonify({
+        "message": "Unauthorized. Admin access is required."
+    }), 401
+
+
+# ============================================================
+# FEATURE 1 - STUDENT SIGNUP
+# ============================================================
+
+
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
@@ -221,6 +245,322 @@ def notices_page():
 
 
 # Feature 4 - Events API
+@app.route("/admin-notices")
+def admin_notices_page():
+
+    if not is_admin_authenticated():
+        return redirect(url_for("admin_login"))
+
+    return render_template(
+        "admin_notices.html",
+        admin_name=session.get("admin_name", "Administrator")
+    )
+
+
+# ============================================================
+# FEATURE 8.3 - ADMIN NOTICES API
+# GET: RETRIEVE ALL NOTICES FOR ADMIN MANAGEMENT
+# POST: CREATE A NOTICE
+# ============================================================
+
+@app.route("/api/admin/notices", methods=["GET", "POST"])
+def admin_notices_api():
+
+    if not is_admin_authenticated():
+        return admin_api_unauthorized_response()
+
+    # --------------------------------------------------------
+    # GET - Retrieve notices for the management interface
+    # --------------------------------------------------------
+
+    if request.method == "GET":
+        conn = get_db_connection()
+
+        try:
+            notices = conn.execute(
+                """
+                SELECT id, title, content, date, category
+                FROM notices
+                ORDER BY date DESC, id DESC
+                """
+            ).fetchall()
+
+            return jsonify({
+                "notices": [dict(notice) for notice in notices]
+            })
+
+        finally:
+            conn.close()
+
+    # --------------------------------------------------------
+    # POST - Create a new notice
+    # --------------------------------------------------------
+
+    data = request.get_json(silent=True)
+
+    if not isinstance(data, dict):
+        return jsonify({
+            "message": "A valid JSON request body is required."
+        }), 400
+
+    title = data.get("title")
+    content = data.get("content")
+    notice_date = data.get("date")
+    category = data.get("category")
+
+    if not all(
+        isinstance(value, str)
+        for value in (title, content, notice_date, category)
+    ):
+        return jsonify({
+            "message": "Title, content, date, and category are required."
+        }), 400
+
+    title = title.strip()
+    content = content.strip()
+    notice_date = notice_date.strip()
+    category = category.strip()
+
+    allowed_categories = {
+        "Academic",
+        "Examination",
+        "Library",
+        "Fees",
+        "Events",
+        "Campus",
+        "General"
+    }
+
+    if not title:
+        return jsonify({
+            "message": "Notice title is required."
+        }), 400
+
+    if len(title) > 200:
+        return jsonify({
+            "message": "Notice title cannot exceed 200 characters."
+        }), 400
+
+    if not content:
+        return jsonify({
+            "message": "Notice content is required."
+        }), 400
+
+    if category not in allowed_categories:
+        return jsonify({
+            "message": "Please select a valid notice category."
+        }), 400
+
+    try:
+        datetime.strptime(notice_date, "%Y-%m-%d")
+    except ValueError:
+        return jsonify({
+            "message": "Please provide a valid notice date."
+        }), 400
+
+    conn = get_db_connection()
+
+    try:
+        cursor = conn.execute(
+            """
+            INSERT INTO notices (title, content, date, category)
+            VALUES (?, ?, ?, ?)
+            """,
+            (title, content, notice_date, category)
+        )
+
+        conn.commit()
+
+        notice_id = cursor.lastrowid
+
+        created_notice = conn.execute(
+            """
+            SELECT id, title, content, date, category
+            FROM notices
+            WHERE id = ?
+            """,
+            (notice_id,)
+        ).fetchone()
+
+        return jsonify({
+            "message": "Notice created successfully.",
+            "notice": dict(created_notice)
+        }), 201
+
+    except sqlite3.Error:
+        conn.rollback()
+
+        app.logger.exception("Unable to create notice.")
+
+        return jsonify({
+            "message": "The notice could not be created. Please try again."
+        }), 500
+
+    finally:
+        conn.close()
+
+
+# ============================================================
+# FEATURE 8.3 - UPDATE OR DELETE A NOTICE
+# PUT: UPDATE AN EXISTING NOTICE
+# DELETE: REMOVE AN EXISTING NOTICE
+# ============================================================
+
+@app.route(
+    "/api/admin/notices/<int:notice_id>",
+    methods=["PUT", "DELETE"]
+)
+def manage_admin_notice(notice_id):
+
+    if not is_admin_authenticated():
+        return admin_api_unauthorized_response()
+
+    conn = get_db_connection()
+
+    try:
+        existing_notice = conn.execute(
+            """
+            SELECT id, title, content, date, category
+            FROM notices
+            WHERE id = ?
+            """,
+            (notice_id,)
+        ).fetchone()
+
+        if existing_notice is None:
+            return jsonify({
+                "message": "Notice not found."
+            }), 404
+
+        # ----------------------------------------------------
+        # DELETE - Remove an existing notice
+        # ----------------------------------------------------
+
+        if request.method == "DELETE":
+            conn.execute(
+                "DELETE FROM notices WHERE id = ?",
+                (notice_id,)
+            )
+
+            conn.commit()
+
+            return jsonify({
+                "message": "Notice deleted successfully.",
+                "id": notice_id
+            })
+
+        # ----------------------------------------------------
+        # PUT - Update an existing notice
+        # ----------------------------------------------------
+
+        data = request.get_json(silent=True)
+
+        if not isinstance(data, dict):
+            return jsonify({
+                "message": "A valid JSON request body is required."
+            }), 400
+
+        title = data.get("title")
+        content = data.get("content")
+        notice_date = data.get("date")
+        category = data.get("category")
+
+        if not all(
+            isinstance(value, str)
+            for value in (title, content, notice_date, category)
+        ):
+            return jsonify({
+                "message": "Title, content, date, and category are required."
+            }), 400
+
+        title = title.strip()
+        content = content.strip()
+        notice_date = notice_date.strip()
+        category = category.strip()
+
+        allowed_categories = {
+            "Academic",
+            "Examination",
+            "Library",
+            "Fees",
+            "Events",
+            "Campus",
+            "General"
+        }
+
+        if not title:
+            return jsonify({
+                "message": "Notice title is required."
+            }), 400
+
+        if len(title) > 200:
+            return jsonify({
+                "message": "Notice title cannot exceed 200 characters."
+            }), 400
+
+        if not content:
+            return jsonify({
+                "message": "Notice content is required."
+            }), 400
+
+        if category not in allowed_categories:
+            return jsonify({
+                "message": "Please select a valid notice category."
+            }), 400
+
+        try:
+            datetime.strptime(notice_date, "%Y-%m-%d")
+        except ValueError:
+            return jsonify({
+                "message": "Please provide a valid notice date."
+            }), 400
+
+        conn.execute(
+            """
+            UPDATE notices
+            SET title = ?, content = ?, date = ?, category = ?
+            WHERE id = ?
+            """,
+            (title, content, notice_date, category, notice_id)
+        )
+
+        conn.commit()
+
+        updated_notice = conn.execute(
+            """
+            SELECT id, title, content, date, category
+            FROM notices
+            WHERE id = ?
+            """,
+            (notice_id,)
+        ).fetchone()
+
+        return jsonify({
+            "message": "Notice updated successfully.",
+            "notice": dict(updated_notice)
+        })
+
+    except sqlite3.Error:
+        conn.rollback()
+
+        app.logger.exception(
+            "Unable to manage notice with ID %s.",
+            notice_id
+        )
+
+        return jsonify({
+            "message": "The notice could not be processed. Please try again."
+        }), 500
+
+    finally:
+        conn.close()
+
+
+# ============================================================
+# FEATURE 4 - EVENTS API
+# ============================================================
+
+
 @app.route("/api/events")
 def get_events():
     conn = get_db_connection()
