@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Connect - Notice Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin_notices.css') }}">
+</head>
+
+<body>
+    <div class="admin-notices-container">
+
+        <!-- Admin Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h1>Campus Connect</h1>
+                <p>Administrator Portal</p>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Admin navigation">
+                <a href="{{ url_for('admin_dashboard') }}"
+                   class="nav-link">Dashboard</a>
+
+                   <a href="{{ url_for('admin_notices_page') }}"
+                   class="nav-link active"
+                   aria-current="page">Notices</a>
+
+                <a href="#" class="nav-link">Events</a>
+                <a href="#" class="nav-link">Resources</a>
+                <a href="#" class="nav-link">Discussions</a>
+
+                <a href="#" class="nav-link logout-link">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+
+            <header class="page-header">
+                <div>
+                    <p class="page-eyebrow">ADMINISTRATION</p>
+                    <h2>Notice Management</h2>
+                    <p class="page-description">
+                        Create, update, and manage important campus announcements.
+                    </p>
+                </div>
+
+                <div class="admin-profile">
+                    <span class="profile-avatar" aria-hidden="true">A</span>
+                    <span>Administrator</span>
+                </div>
+            </header>
+
+            <!-- Notice Summary -->
+            <section class="summary-grid" aria-label="Notice summary">
+
+                <article class="summary-card">
+                    <div class="summary-icon" aria-hidden="true">N</div>
+                    <div>
+                        <p class="summary-label">Total Notices</p>
+                        <h3 id="total-notices">—</h3>
+                        <p class="summary-note">Published campus announcements</p>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon" aria-hidden="true">+</div>
+                    <div>
+                        <p class="summary-label">Recently Added</p>
+                        <h3 id="recent-notices">—</h3>
+                        <p class="summary-note">Notices from the last 7 days</p>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon" aria-hidden="true">C</div>
+                    <div>
+                        <p class="summary-label">Categories</p>
+                        <h3 id="notice-categories-count">—</h3>
+                        <p class="summary-note">Categories currently in use</p>
+                    </div>
+                </article>
+
+            </section>
+
+            <!-- Notice Form -->
+            <section class="content-panel create-notice-panel">
+                <div class="section-heading">
+                    <div>
+                        <h3>Create New Notice</h3>
+                        <p>Fill in the details to prepare a campus announcement.</p>
+                    </div>
+                    <span class="section-tag">New Notice</span>
+                </div>
+
+                <form id="create-notice-form">
+                    <div class="form-grid">
+
+                        <div class="form-group full-width">
+                            <label for="notice-title">
+                                Notice Title <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="notice-title"
+                                name="title"
+                                placeholder="Enter a clear notice title"
+                                maxlength="200"
+                                required
+                                aria-describedby="title-help">
+                            <small id="title-help" class="field-help">
+                                Use a short, descriptive title.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notice-category">
+                                Category <span class="required">*</span>
+                            </label>
+                            <select id="notice-category"
+                                    name="category"
+                                    required>
+                                <option value="">Select a category</option>
+                                <option value="Academic">Academic</option>
+                                <option value="Examination">Examination</option>
+                                <option value="Library">Library</option>
+                                <option value="Fees">Fees</option>
+                                <option value="Events">Events</option>
+                                <option value="Campus">Campus</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notice-date">
+                                Notice Date <span class="required">*</span>
+                            </label>
+                            <input
+                                type="date"
+                                id="notice-date"
+                                name="date"
+                                required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="notice-content">
+                                Notice Content <span class="required">*</span>
+                            </label>
+                            <textarea
+                                id="notice-content"
+                                name="content"
+                                rows="6"
+                                placeholder="Write the complete announcement here..."
+                                required
+                                aria-describedby="content-help"></textarea>
+                            <small id="content-help" class="field-help">
+                                Include the important details students need to know.
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <p class="required-note">
+                            <span class="required">*</span> Required fields
+                        </p>
+                        <button type="reset" class="btn btn-secondary">
+                            Clear Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Create Notice
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Notice Management -->
+            <section class="content-panel management-panel">
+                <div class="section-heading">
+                    <div>
+                        <h3>Manage Notices</h3>
+                        <p>Search and review campus announcements.</p>
+                    </div>
+                </div>
+
+                <div class="notice-toolbar">
+                    <div class="search-group">
+                        <label for="notice-search">Search notices</label>
+                        <input
+                            type="search"
+                            id="notice-search"
+                            placeholder="Search by title or content...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="notice-category-filter">Filter by category</label>
+                        <select id="notice-category-filter">
+                            <option value="">All Categories</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Examination">Examination</option>
+                            <option value="Library">Library</option>
+                            <option value="Fees">Fees</option>
+                            <option value="Events">Events</option>
+                            <option value="Campus">Campus</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="notice-loading-state"
+                     class="notice-state loading-state"
+                     role="status"
+                     hidden>
+                    Loading notices...
+                </div>
+
+                <!-- Error State -->
+                <div id="notice-error-state"
+                     class="notice-state error-state"
+                     role="alert"
+                     hidden>
+                    <span id="notice-error-message">
+                        Notices could not be loaded. Please try again later.
+                    </span>
+                    <button type="button"
+                            id="retry-load-notices"
+                            class="btn btn-secondary">
+                        Try Again
+                    </button>
+                </div>
+
+                <!-- Success State -->
+                <div id="notice-success-state"
+                     class="notice-state success-state"
+                     role="status"
+                     hidden>
+                    Notice action completed successfully.
+                </div>
+
+                <!-- Empty State -->
+                <div id="notice-empty-state" class="empty-state">
+                    <div class="empty-state-icon" aria-hidden="true">N</div>
+                    <h4>No notices to display</h4>
+                    <p>
+                        No notices match your current search or filter.
+                        Try changing your search criteria or create a new notice.
+                    </p>
+                </div>
+
+                <!-- Notice cards are rendered dynamically by JavaScript -->
+                <div id="notices-management-list"
+                     class="notices-management-list"
+                     aria-live="polite">
+                </div>
+
+            </section>
+
+            <footer class="page-footer">
+                <p>Campus Connect · Administrator Portal</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin_notices.js') }}" defer></script>
+</body>
+</html>
