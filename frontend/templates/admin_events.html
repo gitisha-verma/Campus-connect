@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect - Event Management</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin_events.css') }}">
+</head>
+<body>
+    <div class="admin-events-container">
+
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h1>Campus Connect</h1>
+                <p>Administrator Portal</p>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Admin navigation">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('admin_notices_page') }}" class="nav-link">
+                    Notices
+                </a>
+
+                <a href="{{ url_for('admin_events_page') }}"
+                   class="nav-link active" aria-current="page">
+                    Events
+                </a>
+
+                <a href="{{ url_for('admin_resources_page') }}" class="nav-link">
+                    Resources
+                </a>
+
+                <a href="{{ url_for('admin_profile_page') }}" class="nav-link">
+                    Admin Profile
+                </a>
+
+                <a href="#" class="nav-link">Discussions</a>
+
+                <a href="{{ url_for('admin_logout') }}"
+                   class="nav-link logout-link">
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-main-content">
+            <header class="page-header">
+                <div>
+                    <p class="page-eyebrow">ADMINISTRATION</p>
+                    <h2>Event Management</h2>
+                    <p class="page-description">
+                        Create and manage campus events in one place.
+                    </p>
+                </div>
+
+                <div class="admin-profile">
+                    <span class="profile-avatar" aria-hidden="true">A</span>
+                    <span>Administrator</span>
+                </div>
+            </header>
+
+            <section class="event-summary" aria-label="Event statistics">
+                <article class="summary-card">
+                    <h3>Total Events</h3>
+                    <p id="total-events">—</p>
+                </article>
+
+                <article class="summary-card">
+                    <h3>Upcoming Events</h3>
+                    <p id="upcoming-events">—</p>
+                </article>
+
+                <article class="summary-card">
+                    <h3>Past Events</h3>
+                    <p id="past-events">—</p>
+                </article>
+            </section>
+
+            <section class="content-panel"
+                     aria-labelledby="event-form-heading">
+                <div class="section-heading">
+                    <div>
+                        <h3 id="event-form-heading">Create New Event</h3>
+                        <p>Enter the details for the campus event.</p>
+                    </div>
+                </div>
+
+                <div id="event-loading-state"
+                     class="event-state"
+                     role="status" hidden>
+                    Loading events...
+                </div>
+
+                <div id="event-error-state"
+                     class="event-state error-state"
+                     role="alert" hidden></div>
+
+                <div id="event-success-state"
+                     class="event-state success-state"
+                     role="status" hidden></div>
+
+                <form id="create-event-form">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="event-title">
+                                Event Title
+                                <span class="required">*</span>
+                            </label>
+
+                            <input type="text"
+                                   id="event-title"
+                                   name="title"
+                                   maxlength="200"
+                                   required
+                                   placeholder="Enter event title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event-date">
+                                Event Date
+                                <span class="required">*</span>
+                            </label>
+
+                            <input type="date"
+                                   id="event-date"
+                                   name="date"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event-time">Event Time</label>
+
+                            <input type="time"
+                                   id="event-time"
+                                   name="time">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event-location">Location</label>
+
+                            <input type="text"
+                                   id="event-location"
+                                   name="location"
+                                   maxlength="200"
+                                   placeholder="Enter event location">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="event-description">
+                                Description
+                                <span class="required">*</span>
+                            </label>
+
+                            <textarea id="event-description"
+                                      name="description"
+                                      rows="5"
+                                      required
+                                      placeholder="Describe the event"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <p class="required-note">
+                            <span class="required">*</span>
+                            Required fields
+                        </p>
+
+                        <button type="reset" class="btn btn-secondary">
+                            Clear Form
+                        </button>
+
+                        <button type="submit"
+                                id="create-event-button"
+                                class="btn btn-primary">
+                            Create Event
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="content-panel management-panel"
+                     aria-labelledby="manage-events-heading">
+                <div class="section-heading">
+                    <div>
+                        <h3 id="manage-events-heading">Manage Events</h3>
+                        <p>Search and review campus events.</p>
+                    </div>
+                </div>
+
+                <div class="event-toolbar">
+                    <div class="form-group">
+                        <label for="event-search">Search events</label>
+
+                        <input type="search"
+                               id="event-search"
+                               placeholder="Search by title or description">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-date-filter">Filter by date</label>
+
+                        <select id="event-date-filter">
+                            <option value="">All Events</option>
+                            <option value="upcoming">Upcoming Events</option>
+                            <option value="past">Past Events</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="event-empty-state"
+                     class="event-state"
+                     hidden>
+                    <h4>No events found</h4>
+                    <p>
+                        There are no events to display right now.
+                        Try changing your search or date filter,
+                        or create a new event.
+                    </p>
+                </div>
+
+                <div id="event-list"
+                     class="event-list"
+                     aria-live="polite">
+                    <!-- Event records are inserted by JavaScript. -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin_events.js') }}"></script>
+</body>
+</html>
