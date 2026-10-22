@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Management | Campus Connect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin_discussions.css') }}">
+</head>
+<body>
+    <div class="admin-discussions-container">
+
+        <!-- Admin Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h1>Campus Connect</h1>
+                <p>Administrator Portal</p>
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Admin navigation">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                    Dashboard
+                </a>
+                <a href="#" class="nav-link">Notices</a>
+                <a href="#" class="nav-link">Events</a>
+                <a href="#" class="nav-link">Resources</a>
+                <a href="#" class="nav-link active" aria-current="page">
+                    Discussions
+                </a>
+                <a href="#" class="nav-link">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main-content">
+
+            <header class="page-header">
+                <div>
+                    <p class="page-eyebrow">ADMINISTRATION</p>
+                    <h2>Discussion Management</h2>
+                    <p class="page-description">
+                        Review and manage student discussions from one place.
+                    </p>
+                </div>
+
+                <div class="admin-profile">
+                    <div class="admin-avatar" aria-hidden="true">A</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <span>Admin Portal</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Summary -->
+            <section class="summary-grid" aria-label="Discussion summary">
+
+                <article class="summary-card">
+                    <p>Total Discussions</p>
+                    <h3 id="total-discussions">—</h3>
+                    <span>All available discussions</span>
+                </article>
+
+                <article class="summary-card">
+                    <p>Matching Discussions</p>
+                    <h3 id="matching-discussions">—</h3>
+                    <span>Based on your current search</span>
+                </article>
+
+            </section>
+
+            <!-- Discussion Management Panel -->
+            <section class="management-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>Student Discussions</h3>
+                        <p>Search discussions and review their details.</p>
+                    </div>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="discussion-controls">
+
+                    <div class="search-group">
+                        <label for="discussion-search">Search discussions</label>
+                        <input
+                            type="search"
+                            id="discussion-search"
+                            placeholder="Search by title, content, or author..."
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="discussion-sort">Sort by date</label>
+                        <select id="discussion-sort">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="clear-discussion-filters"
+                            class="btn-secondary">
+                        Clear
+                    </button>
+
+                </div>
+
+                <!-- Status Messages -->
+                <div id="admin-discussions-loading-state"
+                     class="status-message" role="status" hidden>
+                    <p>Loading discussions...</p>
+                </div>
+
+                <div id="admin-discussions-error-state"
+                     class="status-message error-message"
+                     role="alert" hidden>
+                    <p>Discussions could not be loaded. Please try again.</p>
+                    <button type="button" id="retry-discussions-button"
+                            class="btn-secondary">
+                        Try Again
+                    </button>
+                </div>
+
+                <div id="admin-discussions-success-state"
+                     class="status-message success-message"
+                     role="status" hidden>
+                    <p id="discussion-success-message">
+                        The operation completed successfully.
+                    </p>
+                </div>
+
+                <!-- Discussion Cards Are Added Here -->
+                <div id="admin-discussions-list"
+                     class="discussion-management-list"
+                     aria-label="Discussion results"
+                     aria-live="polite">
+                </div>
+
+                <!-- Empty State -->
+                <div id="admin-discussions-empty-state"
+                     class="empty-state">
+                    <div class="empty-state-icon" aria-hidden="true">💬</div>
+                    <h3>No discussions to display</h3>
+                    <p>
+                        Discussions will appear here when available.
+                        Try changing your search or filters.
+                    </p>
+                </div>
+
+            </section>
+
+            <footer class="admin-footer">
+                <p>Campus Connect &middot; Administrator Portal</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- Template Used to Display Each Discussion -->
+    <template id="admin-discussion-card-template">
+        <article class="discussion-management-card">
+
+            <div class="discussion-card-main">
+                <h3 class="discussion-card-title"></h3>
+
+                <p class="discussion-card-preview"></p>
+
+                <div class="discussion-card-meta">
+                    <span class="discussion-card-author"></span>
+                    <span class="discussion-card-date"></span>
+                </div>
+            </div>
+
+            <div class="discussion-card-actions">
+                <button type="button"
+                        class="btn-secondary discussion-view-button"
+                        data-action="view">
+                    View Details
+                </button>
+
+                <button type="button"
+                        class="btn-secondary discussion-moderate-button"
+                        data-action="moderate">
+                    Moderate
+                </button>
+
+                <button type="button"
+                        class="btn-danger discussion-delete-button"
+                        data-action="delete">
+                    Delete
+                </button>
+            </div>
+
+        </article>
+    </template>
+
+    <!-- Delete Confirmation Dialog -->
+    <dialog id="delete-discussion-dialog"
+            class="confirmation-dialog"
+            aria-labelledby="delete-discussion-title"
+            aria-describedby="delete-discussion-description">
+
+        <div class="dialog-content">
+            <h2 id="delete-discussion-title">Delete Discussion?</h2>
+
+            <p id="delete-discussion-description">
+                Are you sure you want to delete
+                <strong id="delete-discussion-name">this discussion</strong>?
+                This action may not be reversible.
+            </p>
+
+            <div class="dialog-actions">
+                <button type="button" id="cancel-delete-discussion"
+                        class="btn-secondary">
+                    Cancel
+                </button>
+
+                <button type="button" id="confirm-delete-discussion"
+                        class="btn-danger">
+                    Delete Discussion
+                </button>
+            </div>
+        </div>
+
+    </dialog>
+
+</body>
+</html>
