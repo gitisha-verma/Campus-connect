@@ -21,6 +21,12 @@
         const formHeading = document.getElementById("resource-form-heading");
         const submitButton = document.getElementById("create-resource-button");
 
+        // Custom delete confirmation dialog elements
+        const deleteDialog = document.getElementById("delete-resource-dialog");
+        const deleteDescription = document.getElementById("delete-resource-description");
+        const cancelDeleteButton = document.getElementById("cancel-delete-resource");
+        const confirmDeleteButton = document.getElementById("confirm-delete-resource");
+
         const required = [
             form, titleInput, categoryInput, linkInput, descriptionInput,
             searchInput, categoryFilter, resourceList, loadingState,
@@ -33,7 +39,22 @@
             return;
         }
 
-        const state = { resources: [], editingId: null };
+        if (
+            !deleteDialog ||
+            !deleteDescription ||
+            !cancelDeleteButton ||
+            !confirmDeleteButton
+        ) {
+            console.error(
+                "Admin resources: delete confirmation dialog elements are missing."
+            );
+            return;
+        }
+
+        const state = {
+            resources: [],
+            editingId: null
+        };
 
         function showMessage(element, message) {
             element.textContent = message;
@@ -50,12 +71,15 @@
                 ...options,
                 headers: {
                     Accept: "application/json",
-                    ...(options.body ? { "Content-Type": "application/json" } : {}),
+                    ...(options.body
+                        ? { "Content-Type": "application/json" }
+                        : {}),
                     ...options.headers
                 }
             });
 
             let data = {};
+
             try {
                 data = await response.json();
             } catch {
@@ -63,11 +87,17 @@
             }
 
             if (response.status === 401 || response.status === 403) {
-                throw new Error("Your admin session may have expired. Please sign in again.");
+                throw new Error(
+                    "Your admin session may have expired. Please sign in again."
+                );
             }
 
             if (!response.ok) {
-                throw new Error(data.error || data.message || `Request failed (HTTP ${response.status}).`);
+                throw new Error(
+                    data.error ||
+                    data.message ||
+                    `Request failed (HTTP ${response.status}).`
+                );
             }
 
             return data;
@@ -87,10 +117,15 @@
             totalResources.textContent = String(state.resources.length);
 
             const categories = new Set(
-                state.resources.map((resource) => resource.category).filter(Boolean)
+                state.resources
+                    .map((resource) => resource.category)
+                    .filter(Boolean)
             );
+
             categoryCount.textContent = String(categories.size);
-            recentResources.textContent = String(Math.min(state.resources.length, 5));
+            recentResources.textContent = String(
+                Math.min(state.resources.length, 5)
+            );
         }
 
         function createActionButton(label, action, className) {
@@ -133,12 +168,22 @@
 
             const actions = document.createElement("div");
             actions.className = "admin-item-actions";
+
             actions.append(
-                createActionButton("Edit", () => beginEdit(resource), "admin-edit-button"),
-                createActionButton("Delete", () => deleteResource(resource), "admin-delete-button")
+                createActionButton(
+                    "Edit",
+                    () => beginEdit(resource),
+                    "admin-edit-button"
+                ),
+                createActionButton(
+                    "Delete",
+                    () => deleteResource(resource),
+                    "admin-delete-button"
+                )
             );
 
             card.append(title, description, metadata, actions);
+
             return card;
         }
 
@@ -153,12 +198,14 @@
                     resource.category.toLowerCase().includes(query);
 
                 const matchesCategory =
-                    !selectedCategory || resource.category === selectedCategory;
+                    !selectedCategory ||
+                    resource.category === selectedCategory;
 
                 return matchesSearch && matchesCategory;
             });
 
             resourceList.replaceChildren();
+
             filtered.forEach((resource) => {
                 resourceList.appendChild(createResourceCard(resource));
             });
@@ -169,11 +216,13 @@
             if (heading && description) {
                 if (state.resources.length === 0) {
                     heading.textContent = "No resources available";
-                    description.textContent = "Create a resource using the form above.";
+                    description.textContent =
+                        "Create a resource using the form above.";
                     emptyState.hidden = false;
                 } else if (filtered.length === 0) {
                     heading.textContent = "No matching resources";
-                    description.textContent = "Try changing your search or category filter.";
+                    description.textContent =
+                        "Try changing your search or category filter.";
                     emptyState.hidden = false;
                 } else {
                     emptyState.hidden = true;
@@ -185,34 +234,55 @@
 
         function updateCategoryFilter() {
             const current = categoryFilter.value;
-            const categories = [...new Set(
-                state.resources.map((resource) => resource.category).filter(Boolean)
-            )].sort((a, b) => a.localeCompare(b));
 
-            categoryFilter.replaceChildren(new Option("All Categories", ""));
+            const categories = [
+                ...new Set(
+                    state.resources
+                        .map((resource) => resource.category)
+                        .filter(Boolean)
+                )
+            ].sort((a, b) => a.localeCompare(b));
+
+            categoryFilter.replaceChildren(
+                new Option("All Categories", "")
+            );
+
             categories.forEach((category) => {
                 categoryFilter.add(new Option(category, category));
             });
 
-            if (categories.includes(current)) categoryFilter.value = current;
+            if (categories.includes(current)) {
+                categoryFilter.value = current;
+            }
         }
 
         async function loadResources(showLoading = true) {
-            if (showLoading) loadingState.hidden = false;
+            if (showLoading) {
+                loadingState.hidden = false;
+            }
+
             hideMessage(errorState);
 
             try {
                 const data = await request("/api/admin/resources");
+
                 if (!Array.isArray(data.resources)) {
-                    throw new Error("The admin resources API returned an unexpected response.");
+                    throw new Error(
+                        "The admin resources API returned an unexpected response."
+                    );
                 }
 
                 state.resources = data.resources.map(normalizeResource);
+
                 updateCategoryFilter();
                 renderResources();
             } catch (error) {
                 console.error("Unable to load admin resources:", error);
-                showMessage(errorState, error.message || "Resources could not be loaded.");
+
+                showMessage(
+                    errorState,
+                    error.message || "Resources could not be loaded."
+                );
             } finally {
                 loadingState.hidden = true;
             }
@@ -220,35 +290,123 @@
 
         function beginEdit(resource) {
             state.editingId = resource.id;
+
             titleInput.value = resource.title;
+
             const categoryExists = Array.from(categoryInput.options)
-    .some((option) => option.value === resource.category);
+                .some((option) => option.value === resource.category);
 
-if (resource.category && !categoryExists) {
-    categoryInput.add(new Option(resource.category, resource.category));
-}
+            if (resource.category && !categoryExists) {
+                categoryInput.add(
+                    new Option(resource.category, resource.category)
+                );
+            }
 
-categoryInput.value = resource.category;
+            categoryInput.value = resource.category;
             linkInput.value = resource.link;
             descriptionInput.value = resource.description;
 
-            if (formHeading) formHeading.textContent = "Edit Resource";
+            if (formHeading) {
+                formHeading.textContent = "Edit Resource";
+            }
+
             submitButton.textContent = "Save Changes";
+
             hideMessage(errorState);
             hideMessage(successState);
-            form.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            form.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
             titleInput.focus();
         }
 
         function resetEditor() {
             state.editingId = null;
             form.reset();
-            if (formHeading) formHeading.textContent = "Create Resource";
+
+            if (formHeading) {
+                formHeading.textContent = "Create Resource";
+            }
+
             submitButton.textContent = "Create Resource";
+        }
+
+        // Open a custom confirmation dialog and return the user's choice.
+        function confirmResourceDeletion(resource) {
+            deleteDescription.textContent =
+                `Are you sure you want to delete "${resource.title}"? ` +
+                "This action cannot be undone.";
+
+            deleteDialog.hidden = false;
+            cancelDeleteButton.focus();
+
+            return new Promise((resolve) => {
+                let settled = false;
+
+                function cleanup() {
+                    cancelDeleteButton.removeEventListener(
+                        "click",
+                        handleCancel
+                    );
+
+                    confirmDeleteButton.removeEventListener(
+                        "click",
+                        handleConfirm
+                    );
+
+                    deleteDialog.removeEventListener(
+                        "keydown",
+                        handleKeydown
+                    );
+                }
+
+                function finish(confirmed) {
+                    if (settled) return;
+
+                    settled = true;
+                    cleanup();
+                    deleteDialog.hidden = true;
+                    resolve(confirmed);
+                }
+
+                function handleCancel() {
+                    finish(false);
+                }
+
+                function handleConfirm() {
+                    finish(true);
+                }
+
+                function handleKeydown(event) {
+                    if (event.key === "Escape") {
+                        event.preventDefault();
+                        finish(false);
+                    }
+                }
+
+                cancelDeleteButton.addEventListener(
+                    "click",
+                    handleCancel
+                );
+
+                confirmDeleteButton.addEventListener(
+                    "click",
+                    handleConfirm
+                );
+
+                deleteDialog.addEventListener(
+                    "keydown",
+                    handleKeydown
+                );
+            });
         }
 
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
+
             hideMessage(errorState);
             hideMessage(successState);
 
@@ -264,11 +422,16 @@ categoryInput.value = resource.category;
                 titleInput.focus();
                 return;
             }
+
             if (!payload.category) {
-                showMessage(errorState, "Please select a resource category.");
+                showMessage(
+                    errorState,
+                    "Please select a resource category."
+                );
                 categoryInput.focus();
                 return;
             }
+
             if (!payload.link) {
                 showMessage(errorState, "Resource link is required.");
                 linkInput.focus();
@@ -277,24 +440,35 @@ categoryInput.value = resource.category;
 
             try {
                 const parsedUrl = new URL(payload.link);
+
                 if (!["http:", "https:"].includes(parsedUrl.protocol)) {
-                    throw new Error("Use a valid link beginning with http:// or https://.");
+                    throw new Error(
+                        "Use a valid link beginning with http:// or https://."
+                    );
                 }
             } catch {
-                showMessage(errorState, "Enter a valid resource URL beginning with http:// or https://.");
+                showMessage(
+                    errorState,
+                    "Enter a valid resource URL beginning with http:// or https://."
+                );
                 linkInput.focus();
                 return;
             }
 
             if (!payload.description) {
-                showMessage(errorState, "Resource description is required.");
+                showMessage(
+                    errorState,
+                    "Resource description is required."
+                );
                 descriptionInput.focus();
                 return;
             }
 
             submitButton.disabled = true;
+
             try {
                 const editing = state.editingId !== null;
+
                 const url = editing
                     ? `/api/admin/resources/${encodeURIComponent(state.editingId)}`
                     : "/api/admin/resources";
@@ -306,29 +480,55 @@ categoryInput.value = resource.category;
 
                 resetEditor();
                 await loadResources(false);
-                showMessage(successState, data.message || (editing ? "Resource updated successfully." : "Resource created successfully."));
+
+                showMessage(
+                    successState,
+                    data.message ||
+                    (editing
+                        ? "Resource updated successfully."
+                        : "Resource created successfully.")
+                );
             } catch (error) {
-                showMessage(errorState, error.message || "The resource could not be saved.");
+                showMessage(
+                    errorState,
+                    error.message || "The resource could not be saved."
+                );
             } finally {
                 submitButton.disabled = false;
             }
         });
 
         async function deleteResource(resource) {
-            if (!window.confirm(`Delete "${resource.title}"? This action cannot be undone.`)) return;
+            const confirmed = await confirmResourceDeletion(resource);
+
+            if (!confirmed) {
+                return;
+            }
 
             hideMessage(errorState);
             hideMessage(successState);
 
             try {
-                const data = await request(`/api/admin/resources/${encodeURIComponent(resource.id)}`, {
-                    method: "DELETE"
-                });
-                if (state.editingId === resource.id) resetEditor();
+                const data = await request(
+                    `/api/admin/resources/${encodeURIComponent(resource.id)}`,
+                    { method: "DELETE" }
+                );
+
+                if (state.editingId === resource.id) {
+                    resetEditor();
+                }
+
                 await loadResources(false);
-                showMessage(successState, data.message || "Resource deleted successfully.");
+
+                showMessage(
+                    successState,
+                    data.message || "Resource deleted successfully."
+                );
             } catch (error) {
-                showMessage(errorState, error.message || "The resource could not be deleted.");
+                showMessage(
+                    errorState,
+                    error.message || "The resource could not be deleted."
+                );
             }
         }
 

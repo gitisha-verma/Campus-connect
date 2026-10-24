@@ -34,7 +34,10 @@
             return;
         }
 
-        const state = { events: [], editingId: null };
+        const state = {
+            events: [],
+            editingId: null
+        };
 
         function showMessage(element, message) {
             element.textContent = message;
@@ -51,12 +54,15 @@
                 ...options,
                 headers: {
                     Accept: "application/json",
-                    ...(options.body ? { "Content-Type": "application/json" } : {}),
+                    ...(options.body
+                        ? { "Content-Type": "application/json" }
+                        : {}),
                     ...options.headers
                 }
             });
 
             let data = {};
+
             try {
                 data = await response.json();
             } catch {
@@ -64,11 +70,17 @@
             }
 
             if (response.status === 401 || response.status === 403) {
-                throw new Error("Your admin session may have expired. Please sign in again.");
+                throw new Error(
+                    "Your admin session may have expired. Please sign in again."
+                );
             }
 
             if (!response.ok) {
-                throw new Error(data.error || data.message || `Request failed (HTTP ${response.status}).`);
+                throw new Error(
+                    data.error ||
+                    data.message ||
+                    `Request failed (HTTP ${response.status}).`
+                );
             }
 
             return data;
@@ -87,30 +99,38 @@
 
         function getEventDate(event) {
             if (!event.date) return null;
+
             const date = new Date(`${event.date}T00:00:00`);
+
             return Number.isNaN(date.getTime()) ? null : date;
         }
 
         function isUpcoming(event) {
             const date = getEventDate(event);
             const today = new Date();
+
             today.setHours(0, 0, 0, 0);
+
             return date !== null && date >= today;
         }
 
         function updateSummary() {
             totalEvents.textContent = String(state.events.length);
+
             const upcoming = state.events.filter(isUpcoming).length;
+
             upcomingEvents.textContent = String(upcoming);
             pastEvents.textContent = String(state.events.length - upcoming);
         }
 
         function createActionButton(label, action, className) {
             const button = document.createElement("button");
+
             button.type = "button";
             button.textContent = label;
             button.className = className;
             button.addEventListener("click", action);
+
             return button;
         }
 
@@ -145,12 +165,22 @@
 
             const actions = document.createElement("div");
             actions.className = "admin-item-actions";
+
             actions.append(
-                createActionButton("Edit", () => beginEdit(event), "admin-edit-button"),
-                createActionButton("Delete", () => deleteEvent(event), "admin-delete-button")
+                createActionButton(
+                    "Edit",
+                    () => beginEdit(event),
+                    "admin-edit-button"
+                ),
+                createActionButton(
+                    "Delete",
+                    () => deleteEvent(event),
+                    "admin-delete-button"
+                )
             );
 
             card.append(title, description, metadata, actions);
+
             return card;
         }
 
@@ -159,31 +189,40 @@
             const filter = dateFilter.value;
 
             const filtered = state.events.filter((event) => {
-                const matchesSearch = [event.title, event.description, event.location]
-                    .some((value) => value.toLowerCase().includes(query));
+                const matchesSearch = [
+                    event.title,
+                    event.description,
+                    event.location
+                ].some((value) => value.toLowerCase().includes(query));
 
                 const matchesDate =
                     filter === "upcoming" ? isUpcoming(event) :
-                    filter === "past" ? getEventDate(event) !== null && !isUpcoming(event) :
-                    true;
+                    filter === "past"
+                        ? getEventDate(event) !== null && !isUpcoming(event)
+                        : true;
 
                 return matchesSearch && matchesDate;
             });
 
             eventList.replaceChildren();
-            filtered.forEach((event) => eventList.appendChild(createEventCard(event)));
+
+            filtered.forEach((event) => {
+                eventList.appendChild(createEventCard(event));
+            });
 
             const heading = emptyState.querySelector("h4");
-            const description = emptyState.querySelector("p");
+            const emptyDescription = emptyState.querySelector("p");
 
-            if (heading && description) {
+            if (heading && emptyDescription) {
                 if (state.events.length === 0) {
                     heading.textContent = "No events available";
-                    description.textContent = "Create an event using the form above.";
+                    emptyDescription.textContent =
+                        "Create an event using the form above.";
                     emptyState.hidden = false;
                 } else if (filtered.length === 0) {
                     heading.textContent = "No matching events";
-                    description.textContent = "Try changing your search or date filter.";
+                    emptyDescription.textContent =
+                        "Try changing your search or date filter.";
                     emptyState.hidden = false;
                 } else {
                     emptyState.hidden = true;
@@ -194,19 +233,30 @@
         }
 
         async function loadEvents(showLoading = true) {
-            if (showLoading) loadingState.hidden = false;
+            if (showLoading) {
+                loadingState.hidden = false;
+            }
+
             hideMessage(errorState);
 
             try {
                 const data = await request("/api/admin/events");
+
                 if (!Array.isArray(data.events)) {
-                    throw new Error("The admin events API returned an unexpected response.");
+                    throw new Error(
+                        "The admin events API returned an unexpected response."
+                    );
                 }
+
                 state.events = data.events.map(normalizeEvent);
                 renderEvents();
             } catch (error) {
                 console.error("Unable to load admin events:", error);
-                showMessage(errorState, error.message || "Events could not be loaded.");
+
+                showMessage(
+                    errorState,
+                    error.message || "Events could not be loaded."
+                );
             } finally {
                 loadingState.hidden = true;
             }
@@ -214,29 +264,44 @@
 
         function beginEdit(event) {
             state.editingId = event.id;
+
             titleInput.value = event.title;
             dateInput.value = event.date;
             timeInput.value = event.time;
             locationInput.value = event.location;
             descriptionInput.value = event.description;
 
-            if (formHeading) formHeading.textContent = "Edit Event";
+            if (formHeading) {
+                formHeading.textContent = "Edit Event";
+            }
+
             submitButton.textContent = "Save Changes";
+
             hideMessage(errorState);
             hideMessage(successState);
-            form.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            form.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
             titleInput.focus();
         }
 
         function resetEditor() {
             state.editingId = null;
             form.reset();
-            if (formHeading) formHeading.textContent = "Create Event";
+
+            if (formHeading) {
+                formHeading.textContent = "Create Event";
+            }
+
             submitButton.textContent = "Create Event";
         }
 
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
+
             hideMessage(errorState);
             hideMessage(successState);
 
@@ -253,11 +318,13 @@
                 titleInput.focus();
                 return;
             }
+
             if (!payload.date) {
                 showMessage(errorState, "Event date is required.");
                 dateInput.focus();
                 return;
             }
+
             if (!payload.description) {
                 showMessage(errorState, "Event description is required.");
                 descriptionInput.focus();
@@ -265,8 +332,10 @@
             }
 
             submitButton.disabled = true;
+
             try {
                 const editing = state.editingId !== null;
+
                 const url = editing
                     ? `/api/admin/events/${encodeURIComponent(state.editingId)}`
                     : "/api/admin/events";
@@ -277,30 +346,119 @@
                 });
 
                 resetEditor();
+
                 await loadEvents(false);
-                showMessage(successState, data.message || (editing ? "Event updated successfully." : "Event created successfully."));
+
+                showMessage(
+                    successState,
+                    data.message ||
+                    (editing
+                        ? "Event updated successfully."
+                        : "Event created successfully.")
+                );
             } catch (error) {
-                showMessage(errorState, error.message || "The event could not be saved.");
+                showMessage(
+                    errorState,
+                    error.message || "The event could not be saved."
+                );
             } finally {
                 submitButton.disabled = false;
             }
         });
 
+        // Custom event deletion confirmation dialog.
         async function deleteEvent(event) {
-            if (!window.confirm(`Delete "${event.title}"? This action cannot be undone.`)) return;
+            const dialog = document.getElementById("delete-event-dialog");
+            const cancelButton = document.getElementById("cancel-delete-event");
+            const confirmButton = document.getElementById("confirm-delete-event");
+            const dialogDescription = document.getElementById(
+                "delete-event-description"
+            );
+
+            if (
+                !dialog ||
+                !cancelButton ||
+                !confirmButton ||
+                !dialogDescription
+            ) {
+                console.error(
+                    "Admin events: deletion confirmation dialog is missing."
+                );
+
+                showMessage(
+                    errorState,
+                    "The confirmation dialog could not be opened. Please refresh the page."
+                );
+
+                return;
+            }
 
             hideMessage(errorState);
             hideMessage(successState);
 
+            dialogDescription.textContent =
+                `Are you sure you want to delete "${event.title}"? This action cannot be undone.`;
+
+            dialog.hidden = false;
+            cancelButton.focus();
+
+            const confirmed = await new Promise((resolve) => {
+                let finished = false;
+
+                const cleanup = () => {
+                    confirmButton.removeEventListener("click", onConfirm);
+                    cancelButton.removeEventListener("click", onCancel);
+                    dialog.removeEventListener("keydown", onKeydown);
+                };
+
+                const finish = (result) => {
+                    if (finished) return;
+
+                    finished = true;
+                    cleanup();
+                    dialog.hidden = true;
+                    resolve(result);
+                };
+
+                const onConfirm = () => finish(true);
+                const onCancel = () => finish(false);
+
+                const onKeydown = (e) => {
+                    if (e.key === "Escape") {
+                        finish(false);
+                    }
+                };
+
+                confirmButton.addEventListener("click", onConfirm);
+                cancelButton.addEventListener("click", onCancel);
+                dialog.addEventListener("keydown", onKeydown);
+            });
+
+            if (!confirmed) return;
+
             try {
-                const data = await request(`/api/admin/events/${encodeURIComponent(event.id)}`, {
-                    method: "DELETE"
-                });
-                if (state.editingId === event.id) resetEditor();
+                const data = await request(
+                    `/api/admin/events/${encodeURIComponent(event.id)}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                if (String(state.editingId) === String(event.id)) {
+                    resetEditor();
+                }
+
                 await loadEvents(false);
-                showMessage(successState, data.message || "Event deleted successfully.");
+
+                showMessage(
+                    successState,
+                    data.message || "Event deleted successfully."
+                );
             } catch (error) {
-                showMessage(errorState, error.message || "The event could not be deleted.");
+                showMessage(
+                    errorState,
+                    error.message || "The event could not be deleted."
+                );
             }
         }
 

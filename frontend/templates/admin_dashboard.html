@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Campus Connect - Admin Dashboard</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/admin_dashboard.css') }}"
+    >
 </head>
 
 <body>
-
     <div class="admin-dashboard">
 
         <!-- Admin Sidebar -->
         <aside class="admin-sidebar">
-
             <div class="sidebar-brand">
                 <h1>Campus Connect</h1>
                 <p>Administrator Portal</p>
             </div>
 
-            <nav class="admin-navigation" aria-label="Administrator navigation">
-                <a href="#" class="nav-link active">
+            <nav
+                class="admin-navigation"
+                aria-label="Administrator navigation"
+            >
+                <a
+                    href="{{ url_for('admin_dashboard') }}"
+                    class="nav-link active"
+                    aria-current="page"
+                >
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{{ url_for('admin_notices_page') }}" class="nav-link">
+                <a
+                    href="{{ url_for('admin_notices_page') }}"
+                    class="nav-link"
+                >
                     <span>Notices</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a
+                    href="{{ url_for('admin_events_page') }}"
+                    class="nav-link"
+                >
                     <span>Events</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a
+                    href="{{ url_for('admin_resources_page') }}"
+                    class="nav-link"
+                >
                     <span>Resources</span>
                 </a>
 
-                <a href="#" class="nav-link">
+                <a
+                    href="{{ url_for('admin_discussions_page') }}"
+                    class="nav-link"
+                >
                     <span>Discussions</span>
                 </a>
 
-                <a href="{{ url_for('admin_logout') }}" class="nav-link logout-link">
+                <a
+                    href="{{ url_for('admin_profile_page') }}"
+                    class="nav-link"
+                >
+                    <span>Admin Profile</span>
+                </a>
+
+                <a
+                    href="{{ url_for('admin_logout') }}"
+                    class="nav-link logout-link"
+                >
                     <span>Logout</span>
                 </a>
             </nav>
-
         </aside>
 
         <!-- Main Dashboard Content -->
@@ -55,7 +83,6 @@
 
             <!-- Header -->
             <header class="admin-header">
-
                 <div>
                     <p class="portal-label">Administrator Portal</p>
 
@@ -73,178 +100,148 @@
                         {{ admin_name|default('Administrator') }}
                     </strong>
                 </div>
-
             </header>
 
             <!-- Statistics -->
-            <section class="dashboard-section" aria-labelledby="statistics-title">
-
+            <section
+                class="dashboard-section"
+                aria-labelledby="statistics-title"
+            >
                 <div class="section-heading">
                     <h3 id="statistics-title">Dashboard Overview</h3>
 
-                    <p>
-                        Current Campus Connect statistics.
-                    </p>
+                    <p>Current Campus Connect statistics.</p>
                 </div>
 
                 <div class="statistics-grid">
-
                     <article class="stat-card">
                         <div class="stat-card-content">
-
-                            <p class="stat-label">
-                                Total Students
-                            </p>
+                            <p class="stat-label">Total Students</p>
 
                             <p class="stat-value" id="total-students">
                                 {{ total_students }}
                             </p>
-
                         </div>
                     </article>
 
                     <article class="stat-card">
                         <div class="stat-card-content">
-
-                            <p class="stat-label">
-                                Total Notices
-                            </p>
+                            <p class="stat-label">Total Notices</p>
 
                             <p class="stat-value" id="total-notices">
                                 {{ total_notices }}
                             </p>
-
                         </div>
                     </article>
 
                     <article class="stat-card">
                         <div class="stat-card-content">
-
-                            <p class="stat-label">
-                                Total Events
-                            </p>
+                            <p class="stat-label">Total Events</p>
 
                             <p class="stat-value" id="total-events">
                                 {{ total_events }}
                             </p>
-
                         </div>
                     </article>
 
                     <article class="stat-card">
                         <div class="stat-card-content">
-
-                            <p class="stat-label">
-                                Total Resources
-                            </p>
+                            <p class="stat-label">Total Resources</p>
 
                             <p class="stat-value" id="total-resources">
                                 {{ total_resources }}
                             </p>
-
                         </div>
                     </article>
 
                     <article class="stat-card">
                         <div class="stat-card-content">
-
-                            <p class="stat-label">
-                                Total Discussions
-                            </p>
+                            <p class="stat-label">Total Discussions</p>
 
                             <p class="stat-value" id="total-discussions">
                                 {{ total_discussions }}
                             </p>
-
                         </div>
                     </article>
-
                 </div>
-
             </section>
 
             <!-- Quick Actions -->
-            <section class="dashboard-section" aria-labelledby="quick-actions-title">
-
+            <section
+                class="dashboard-section"
+                aria-labelledby="quick-actions-title"
+            >
                 <div class="section-heading">
                     <h3 id="quick-actions-title">Quick Actions</h3>
 
-                    <p>
-                        Access common administrative tasks.
-                    </p>
+                    <p>Access common administrative tasks.</p>
                 </div>
 
                 <div class="quick-actions-grid">
-
-                    <a href="{{ url_for('admin_notices_page') }}" class="action-card">
-                        <span class="action-title">
-                            Manage Notices
-                        </span>
+                    <a
+                        href="{{ url_for('admin_notices_page') }}"
+                        class="action-card"
+                    >
+                        <span class="action-title">Manage Notices</span>
 
                         <span class="action-description">
                             Create and manage campus notices.
                         </span>
                     </a>
 
-                    <a href="#" class="action-card">
-                        <span class="action-title">
-                            Manage Events
-                        </span>
+                    <a
+                        href="{{ url_for('admin_events_page') }}"
+                        class="action-card"
+                    >
+                        <span class="action-title">Manage Events</span>
 
                         <span class="action-description">
                             Manage upcoming campus events.
                         </span>
                     </a>
 
-                    <a href="#" class="action-card">
-                        <span class="action-title">
-                            Manage Resources
-                        </span>
+                    <a
+                        href="{{ url_for('admin_resources_page') }}"
+                        class="action-card"
+                    >
+                        <span class="action-title">Manage Resources</span>
 
                         <span class="action-description">
                             Organize and manage learning resources.
                         </span>
                     </a>
 
-                    <a href="#" class="action-card">
-                        <span class="action-title">
-                            Manage Discussions
-                        </span>
+                    <a
+                        href="{{ url_for('admin_discussions_page') }}"
+                        class="action-card"
+                    >
+                        <span class="action-title">Manage Discussions</span>
 
                         <span class="action-description">
                             Monitor and manage discussion activity.
                         </span>
                     </a>
-
                 </div>
-
             </section>
 
             <!-- Admin Dashboard Status -->
             <section class="dashboard-section integration-section">
-
                 <div class="integration-placeholder">
-
-                    <h3>
-                        Admin Dashboard Ready
-                    </h3>
+                    <h3>Admin Dashboard Ready</h3>
 
                     <p>
-                        Use the dashboard overview to monitor current campus activity.
-                        Administrative management actions will be enabled in the
-                        upcoming admin features.
+                        Use the dashboard overview to monitor current campus
+                        activity. Administrative management actions will be
+                        enabled in the upcoming admin features.
                     </p>
-
                 </div>
-
             </section>
 
         </main>
-
     </div>
 
-    <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>
-
+    <script
+        src="{{ url_for('static', filename='js/admin_dashboard.js') }}"
+    ></script>
 </body>
-
 </html>

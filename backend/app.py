@@ -1,4 +1,3 @@
-
 from flask import (
     Flask, request, jsonify, render_template, session,
     send_from_directory, redirect, url_for
@@ -972,6 +971,97 @@ def discussion_detail(discussion_id):
         discussion=discussion,
         replies=replies
     )
+
+# ============================================================
+# FEATURE 8.5 - ADMIN DISCUSSION MANAGEMENT
+# ============================================================
+
+@app.route("/admin-discussions")
+def admin_discussions_page():
+    if not is_admin_authenticated():
+        return redirect(url_for("admin_login"))
+
+    return render_template(
+        "admin_discussions.html",
+        admin_name=session.get("admin_name", "Administrator")
+    )
+
+
+@app.route("/api/admin/discussions", methods=["GET"])
+def admin_discussions_api():
+    if not is_admin_authenticated():
+        return admin_api_unauthorized_response()
+
+    conn = get_db_connection()
+    try:
+        discussions = conn.execute(
+            """
+            SELECT discussions.id, discussions.title, discussions.content,
+                   discussions.created_at, users.name AS author
+            FROM discussions
+            JOIN users ON discussions.user_id = users.id
+            ORDER BY discussions.created_at DESC, discussions.id DESC
+            """
+        ).fetchall()
+
+        return jsonify([dict(discussion) for discussion in discussions])
+
+    except sqlite3.Error:
+        app.logger.exception("Unable to load admin discussions.")
+        return jsonify({
+            "message": "Discussions could not be loaded."
+        }), 500
+
+    finally:
+        conn.close()
+
+
+@app.route(
+    "/api/admin/discussions/<int:discussion_id>",
+    methods=["DELETE"]
+)
+def delete_admin_discussion(discussion_id):
+    if not is_admin_authenticated():
+        return admin_api_unauthorized_response()
+
+    conn = get_db_connection()
+    try:
+        discussion = conn.execute(
+            "SELECT id FROM discussions WHERE id = ?",
+            (discussion_id,)
+        ).fetchone()
+
+        if discussion is None:
+            return jsonify({"message": "Discussion not found."}), 404
+
+        conn.execute(
+            "DELETE FROM replies WHERE discussion_id = ?",
+            (discussion_id,)
+        )
+        conn.execute(
+            "DELETE FROM discussions WHERE id = ?",
+            (discussion_id,)
+        )
+        conn.commit()
+
+        return jsonify({
+            "message": "Discussion deleted successfully.",
+            "id": discussion_id
+        })
+
+    except sqlite3.Error:
+        conn.rollback()
+        app.logger.exception(
+            "Unable to delete admin discussion %s.",
+            discussion_id
+        )
+        return jsonify({
+            "message": "The discussion could not be deleted."
+        }), 500
+
+    finally:
+        conn.close()
+
 
 
 # ============================================================

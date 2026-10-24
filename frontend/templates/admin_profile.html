@@ -1,174 +1,101 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Campus Connect - Admin Profile</title>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/admin_profile.css') }}">
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_profile.css') }}" />
+  </head>
+  <body>
     <div class="admin-profile-container">
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <h1>Campus Connect</h1>
+          <p>Administrator Portal</p>
+        </div>
 
-        <aside class="admin-sidebar">
-            <div class="sidebar-brand">
-                <h1>Campus Connect</h1>
-                <p>Administrator Portal</p>
+        <nav class="sidebar-nav" aria-label="Admin navigation">
+          <a href="{{ url_for('admin_dashboard') }}" class="nav-link">Dashboard</a>
+
+          <a href="{{ url_for('admin_notices_page') }}" class="nav-link">Notices</a>
+
+          <a href="{{ url_for('admin_events_page') }}" class="nav-link">Events</a>
+
+          <a href="{{ url_for('admin_resources_page') }}" class="nav-link">Resources</a>
+
+          <a href="{{ url_for('admin_discussions_page') }}" class="nav-link">Discussions</a>
+          <a href="{{ url_for('admin_profile_page') }}" class="nav-link active" aria-current="page">Admin Profile</a>
+
+          <a href="{{ url_for('admin_logout') }}" class="nav-link logout-link">Logout</a>
+        </nav>
+      </aside>
+
+      <main class="admin-main-content">
+        <header class="page-header">
+          <div>
+            <p class="page-eyebrow">ADMINISTRATION</p>
+            <h2>Admin Profile</h2>
+            <p class="page-description">View and manage your administrator profile details.</p>
+          </div>
+        </header>
+
+        <section class="content-panel" aria-labelledby="profile-overview-heading">
+          <div class="section-heading">
+            <h3 id="profile-overview-heading">Profile Overview</h3>
+            <p>Your administrator account information.</p>
+          </div>
+
+          <div id="profile-loading-state" class="profile-state" role="status" hidden>Loading profile...</div>
+
+          <div id="profile-error-state" class="profile-state error-state" role="alert" hidden></div>
+
+          <div id="profile-success-state" class="profile-state success-state" role="status" hidden></div>
+
+          <div class="profile-summary">
+            <div class="profile-avatar-large" aria-hidden="true">A</div>
+
+            <div>
+              <h4 id="profile-display-name">Administrator</h4>
+              <p id="profile-display-email">Profile information will be loaded here.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-panel" aria-labelledby="edit-profile-heading">
+          <div class="section-heading">
+            <h3 id="edit-profile-heading">Edit Profile</h3>
+            <p>Update the details supported by your administrator account.</p>
+          </div>
+
+          <form id="admin-profile-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="profile-name">Name</label>
+
+                <input type="text" id="profile-name" name="name" maxlength="150" autocomplete="name" placeholder="Enter your name" required disabled />
+              </div>
+
+              <div class="form-group">
+                <label for="profile-email">Email Address</label>
+
+                <input type="email" id="profile-email" name="email" autocomplete="email" placeholder="Enter your email address" required disabled />
+              </div>
             </div>
 
-            <nav class="sidebar-nav" aria-label="Admin navigation">
-                <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
-                    Dashboard
-                </a>
+            <p class="form-note">Only update profile details supported by your administrator account.</p>
 
-                <a href="{{ url_for('admin_notices_page') }}" class="nav-link">
-                    Notices
-                </a>
+            <div class="form-actions">
+              <button type="button" id="edit-profile-button" class="btn btn-primary">Edit Profile</button>
 
-                <a href="{{ url_for('admin_events_page') }}" class="nav-link">
-                    Events
-                </a>
+              <button type="button" id="cancel-profile-button" class="btn btn-secondary" hidden>Cancel</button>
 
-                <a href="{{ url_for('admin_resources_page') }}" class="nav-link">
-                    Resources
-                </a>
-
-                <a href="{{ url_for('admin_profile_page') }}"
-                   class="nav-link active" aria-current="page">
-                    Admin Profile
-                </a>
-
-                <a href="#" class="nav-link">Discussions</a>
-
-                <a href="{{ url_for('admin_logout') }}"
-                   class="nav-link logout-link">
-                    Logout
-                </a>
-            </nav>
-        </aside>
-
-        <main class="admin-main-content">
-            <header class="page-header">
-                <div>
-                    <p class="page-eyebrow">ADMINISTRATION</p>
-                    <h2>Admin Profile</h2>
-                    <p class="page-description">
-                        View and manage your administrator profile details.
-                    </p>
-                </div>
-            </header>
-
-            <section class="content-panel"
-                     aria-labelledby="profile-overview-heading">
-                <div class="section-heading">
-                    <h3 id="profile-overview-heading">Profile Overview</h3>
-                    <p>Your administrator account information.</p>
-                </div>
-
-                <div id="profile-loading-state"
-                     class="profile-state"
-                     role="status" hidden>
-                    Loading profile...
-                </div>
-
-                <div id="profile-error-state"
-                     class="profile-state error-state"
-                     role="alert" hidden></div>
-
-                <div id="profile-success-state"
-                     class="profile-state success-state"
-                     role="status" hidden></div>
-
-                <div class="profile-summary">
-                    <div class="profile-avatar-large" aria-hidden="true">A</div>
-
-                    <div>
-                        <h4 id="profile-display-name">Administrator</h4>
-                        <p id="profile-display-email">
-                            Profile information will be loaded here.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="content-panel"
-                     aria-labelledby="edit-profile-heading">
-                <div class="section-heading">
-                    <h3 id="edit-profile-heading">Edit Profile</h3>
-                    <p>
-                        Update the details supported by your administrator account.
-                    </p>
-                </div>
-
-                <form id="admin-profile-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="profile-name">Name</label>
-
-                            <input
-                                type="text"
-                                id="profile-name"
-                                name="name"
-                                maxlength="150"
-                                autocomplete="name"
-                                placeholder="Enter your name"
-                                required
-                                disabled
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="profile-email">Email Address</label>
-
-                            <input
-                                type="email"
-                                id="profile-email"
-                                name="email"
-                                autocomplete="email"
-                                placeholder="Enter your email address"
-                                required
-                                disabled
-                            >
-                        </div>
-                    </div>
-
-                    <p class="form-note">
-                        Only update profile details supported by your administrator account.
-                    </p>
-
-                    <div class="form-actions">
-                        <button
-                            type="button"
-                            id="edit-profile-button"
-                            class="btn btn-primary"
-                        >
-                            Edit Profile
-                        </button>
-
-                        <button
-                            type="button"
-                            id="cancel-profile-button"
-                            class="btn btn-secondary"
-                            hidden
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            type="submit"
-                            id="save-profile-button"
-                            class="btn btn-primary"
-                            hidden
-                        >
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
-            </section>
-        </main>
+              <button type="submit" id="save-profile-button" class="btn btn-primary" hidden>Save Changes</button>
+            </div>
+          </form>
+        </section>
+      </main>
     </div>
 
     <script src="{{ url_for('static', filename='js/admin_profile.js') }}"></script>
-</body>
+  </body>
 </html>
