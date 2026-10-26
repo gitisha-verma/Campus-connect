@@ -366,10 +366,6 @@
             state.submitting = true;
             submitButton.disabled = true;
 
-            const originalButtonText = editing
-                ? "Update Notice"
-                : "Create Notice";
-
             submitButton.textContent = editing
                 ? "Updating..."
                 : "Creating...";
@@ -409,11 +405,9 @@
                 state.submitting = false;
                 submitButton.disabled = false;
 
-                if (state.editingId !== null) {
-                    submitButton.textContent = "Update Notice";
-                } else {
-                    submitButton.textContent = originalButtonText;
-                }
+                submitButton.textContent = state.editingId !== null
+                    ? "Update Notice"
+                    : "Create Notice";
             }
         }
 
