@@ -40,8 +40,14 @@ body {
     border-radius: 5px;
 }
 
-.sidebar a:hover {
+.sidebar a:hover,
+.sidebar a:focus-visible {
     background-color: #316a9b;
+}
+
+.sidebar a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
 }
 
 .main-content {

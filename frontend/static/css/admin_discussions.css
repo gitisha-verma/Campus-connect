@@ -1,6 +1,5 @@
-
 /* Campus Connect - Admin Discussion Management
-   Feature 8.5 - Styling aligned with Admin Dashboard (Feature 8.2)
+   Feature 8.5 - Shared layout aligned with Admin Dashboard
 */
 
 /* ========================================
@@ -92,11 +91,11 @@ textarea:focus-visible {
 
 /* ========================================
    Sidebar and Navigation
+   Shared Admin Dashboard styling
 ======================================== */
 
 .admin-sidebar {
     width: 240px;
-    min-width: 240px;
     min-height: 100vh;
     padding: 24px 16px;
     flex-shrink: 0;
@@ -116,7 +115,7 @@ textarea:focus-visible {
     font-size: 23px;
     font-weight: 700;
     letter-spacing: normal;
-    line-height: 1.25;
+    line-height: normal;
 }
 
 .sidebar-brand p {
@@ -134,7 +133,8 @@ textarea:focus-visible {
     margin-top: 24px;
 }
 
-.sidebar-nav a {
+.sidebar-nav a,
+.nav-link {
     display: block;
     min-height: auto;
     padding: 12px 14px;
@@ -142,24 +142,35 @@ textarea:focus-visible {
     color: #e5e7eb;
     font-size: 14px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: normal;
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.sidebar-nav a:hover {
+.sidebar-nav a:hover,
+.nav-link:hover {
     color: #ffffff;
     background-color: #374151;
 }
 
-.sidebar-nav a.active {
+.sidebar-nav a.active,
+.nav-link.active {
     color: #ffffff;
     background-color: var(--admin-accent);
     font-weight: 600;
 }
 
-.sidebar-nav a:focus-visible {
-    outline: 3px solid rgba(255, 255, 255, 0.45);
+.sidebar-nav a:focus-visible,
+.nav-link:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.35);
     outline-offset: 2px;
+}
+
+.sidebar-nav .logout-link,
+.logout-link {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0;
 }
 
 /* ========================================
@@ -749,12 +760,16 @@ dialog {
 }
 
 /* ========================================
-   Tablet: Match Admin Dashboard Breakpoint
+   Tablet
 ======================================== */
 
 @media (max-width: 1100px) {
     .admin-main-content {
         padding: 28px;
+    }
+
+    .page-header {
+        align-items: flex-start;
     }
 
     .discussion-management-card {
@@ -770,6 +785,7 @@ dialog {
 
 /* ========================================
    Small Tablet
+   Shared Admin Dashboard navigation layout
 ======================================== */
 
 @media (max-width: 800px) {
@@ -779,7 +795,6 @@ dialog {
 
     .admin-sidebar {
         width: 100%;
-        min-width: 0;
         min-height: auto;
         padding: 18px;
     }
@@ -792,17 +807,30 @@ dialog {
         flex-direction: row;
         flex-wrap: wrap;
         gap: 6px;
-        margin-top: 16px;
+        margin-top: 24px;
     }
 
-    .sidebar-nav a {
+    .sidebar-nav a,
+    .nav-link {
         flex: 1 1 auto;
         text-align: center;
+    }
+
+    .sidebar-nav .logout-link,
+    .logout-link {
+        margin-top: 0;
+        padding-top: 12px;
+        border-top: none;
+    }
+
+    .admin-main-content {
+        padding: 24px;
     }
 
     .page-header {
         flex-direction: column;
         align-items: stretch;
+        gap: 16px;
     }
 
     .admin-profile {
@@ -810,7 +838,7 @@ dialog {
     }
 
     .discussion-controls {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
     #clear-discussion-filters {
@@ -825,11 +853,48 @@ dialog {
 
 /* ========================================
    Mobile
+   Shared Admin Dashboard navigation layout
 ======================================== */
 
 @media (max-width: 600px) {
+    .admin-sidebar {
+        padding: 18px 16px;
+    }
+
+    .sidebar-brand {
+        padding: 0 4px 15px;
+    }
+
+    .sidebar-brand h1 {
+        font-size: 21px;
+    }
+
+    .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 15px;
+    }
+
+    .sidebar-nav a,
+    .nav-link {
+        width: 100%;
+        min-height: 38px;
+        padding: 9px 11px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .sidebar-nav .logout-link,
+    .logout-link {
+        grid-column: 1 / -1;
+        margin-top: 0;
+        padding-top: 9px;
+        border-top: none;
+    }
+
     .admin-main-content {
-        padding: 22px 16px;
+        padding: 18px;
     }
 
     .page-header {
@@ -849,11 +914,16 @@ dialog {
     }
 
     .management-panel {
-        padding: 18px;
+        padding: 19px;
+    }
+
+    .panel-header {
+        flex-direction: column;
+        gap: 12px;
     }
 
     .discussion-controls {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         padding: 16px;
     }
 
@@ -894,15 +964,6 @@ dialog {
         padding: 20px 12px;
     }
 
-    .sidebar-nav {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .sidebar-nav a {
-        width: 100%;
-    }
-
     .page-header h2 {
         font-size: 23px;
     }
@@ -927,6 +988,10 @@ dialog {
         width: 100%;
     }
 }
+
+/* ========================================
+   Reduced Motion Accessibility
+======================================== */
 
 @media (prefers-reduced-motion: reduce) {
     *,

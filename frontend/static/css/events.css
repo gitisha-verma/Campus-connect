@@ -20,6 +20,7 @@ body {
     background-color: #1f4e79;
     color: white;
     padding: 30px 20px;
+    flex-shrink: 0;
 }
 
 .sidebar h1 {
@@ -40,8 +41,14 @@ body {
     border-radius: 5px;
 }
 
-.sidebar a:hover {
+.sidebar a:hover,
+.sidebar a:focus-visible {
     background-color: #316a9b;
+}
+
+.sidebar a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
 }
 
 
@@ -106,10 +113,11 @@ body {
     background-color: white;
 }
 
-.events-controls input:focus,
-.events-controls select:focus {
-    outline: none;
+.events-controls input:focus-visible,
+.events-controls select:focus-visible {
     border-color: #1f4e79;
+    outline: 3px solid rgba(31, 78, 121, 0.15);
+    outline-offset: 1px;
 }
 
 

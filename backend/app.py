@@ -3,6 +3,7 @@ from flask import (
     send_from_directory, redirect, url_for
 )
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 import sqlite3
 from datetime import datetime
 import re
@@ -251,6 +252,11 @@ def login():
 
     if user is None or not check_password_hash(user["password"], password):
         return jsonify({"message": "Invalid email or password"}), 401
+    
+    if user["role"]=="admin":
+        return jsonify({
+            "message": "Please use the admin login page"
+        }),403
 
     session["student_name"] = user["name"]
     session["user_id"] = user["id"]
@@ -1234,15 +1240,13 @@ def admin_profile_api():
 def notices_js():
     return send_from_directory("../frontend", "notices.js")
 
-
 @app.route("/")
 def home():
-    return send_from_directory("../frontend", "index.html")
-
+    return render_template("index.html")
 
 @app.route("/login.html")
 def login_page():
-    return send_from_directory("../frontend", "login.html")
+    return render_template("login.html")
 
 
 @app.route("/signup.html")

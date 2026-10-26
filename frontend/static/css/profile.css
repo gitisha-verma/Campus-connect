@@ -44,8 +44,14 @@ body {
 }
 
 .sidebar a:hover,
-.sidebar a.active {
+.sidebar a.active,
+.sidebar a:focus-visible {
     background-color: #316a9b;
+}
+
+.sidebar a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
 }
 
 /* Main content */

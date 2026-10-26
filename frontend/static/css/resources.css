@@ -41,8 +41,14 @@ body {
     border-radius: 5px;
 }
 
-.sidebar a:hover {
+.sidebar a:hover,
+.sidebar a:focus-visible {
     background-color: #316a9b;
+}
+
+.sidebar a:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
 }
 
 /* Main Content */
@@ -107,12 +113,13 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 15px;
-    outline: none;
 }
 
-.search-box input:focus,
-.filter-box select:focus {
+.search-box input:focus-visible,
+.filter-box select:focus-visible {
     border-color: #1f4e79;
+    outline: 3px solid rgba(31, 78, 121, 0.15);
+    outline-offset: 1px;
 }
 
 /* Resources List */
@@ -136,7 +143,7 @@ body {
     background-color: #e8f0f8;
     color: #1f4e79;
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: 5px;
     font-size: 13px;
     font-weight: bold;
     margin-bottom: 12px;

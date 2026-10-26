@@ -1,0 +1,215 @@
+/* ===== Campus Connect — Student Login ===== */
+
+:root {
+    --primary: #1f4e79;
+    --primary-hover: #173b5c;
+    --background: #f4f6f8;
+    --surface: #ffffff;
+    --text: #222222;
+    --muted: #667085;
+    --border: #d9e0e7;
+    --error: #c62828;
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 32px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* Page heading */
+
+h1 {
+    margin: 0 0 8px;
+    color: var(--primary);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    text-align: center;
+}
+
+h2 {
+    margin: 0 0 24px;
+    color: var(--text);
+    font-size: 23px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Login card */
+
+form#loginForm {
+    width: 100%;
+    max-width: 420px;
+    padding: 34px;
+    background: var(--surface);
+    border: 1px solid #e5e9ef;
+    border-radius: var(--radius);
+    box-shadow: 0 12px 35px rgba(31, 78, 121, 0.09);
+    text-align: left;
+}
+
+/* Error message */
+
+.error-message {
+    min-height: 20px;
+    margin: 0 0 12px;
+    color: var(--error);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Form labels */
+
+form#loginForm label {
+    display: block;
+    margin: 0 0 8px;
+    color: #344054;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Input fields */
+
+form#loginForm input {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    margin: 0 0 22px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: #ffffff;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form#loginForm input::placeholder {
+    color: #98a2b3;
+}
+
+form#loginForm input:hover {
+    border-color: #aab8c7;
+}
+
+form#loginForm input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.12);
+}
+
+/* Login button */
+
+form#loginForm button {
+    display: block;
+    width: 100%;
+    min-height: 46px;
+    margin: 4px 0 22px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 7px;
+    background: var(--primary);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+form#loginForm button:hover {
+    background: var(--primary-hover);
+}
+
+form#loginForm button:active {
+    transform: translateY(1px);
+}
+
+form#loginForm button:focus-visible {
+    outline: 3px solid rgba(31, 78, 121, 0.3);
+    outline-offset: 3px;
+}
+
+/* Signup section */
+
+form#loginForm p:not(.error-message) {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+form#loginForm a {
+    display: block;
+    margin-top: 5px;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+form#loginForm a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+form#loginForm a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Mobile layout */
+
+@media (max-width: 480px) {
+    body {
+        padding: 24px 16px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 21px;
+    }
+
+    form#loginForm {
+        padding: 25px 21px;
+    }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
